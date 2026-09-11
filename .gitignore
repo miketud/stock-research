@@ -1,0 +1,49 @@
+# The ONLY .gitignore in this project. There is deliberately none in backend/ or
+# frontend/ — create-next-app writes one and the bootstrap deletes it.
+#
+# One file means one place to look when something is unexpectedly untracked.
+# Nested ignores are read in addition to this one, in an order that depends on
+# directory depth, and a nested `!negation` cannot re-include a path an ancestor
+# already excluded. Debugging that is why `git check-ignore -v` exists.
+#
+# Consequently NO pattern here starts with `/`. A leading slash anchors a
+# pattern to the directory holding the .gitignore, so `/node_modules` would only
+# match at the root and miss backend/node_modules — exactly the breakage you get
+# from moving a generated ignore file up a level without rewriting it.
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Next
+.next/
+out/
+next-env.d.ts
+
+# Builds
+dist/
+build/
+*.tsbuildinfo
+
+# Testing
+coverage/
+
+# Env — .env.example is committed on purpose; it documents the contract.
+# Hence the narrow patterns rather than CNA's `.env*`, which would swallow it.
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Bootstrap scratch — the manifest itself IS committed; it is the ledger.
+.bootstrap/tmp/
+
+# Deploy
+.vercel
+
+# Editors / OS
+.DS_Store
+*.pem
+*.log
+.vscode/
+.idea/

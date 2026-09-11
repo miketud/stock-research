@@ -1,0 +1,100 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   class:base — THE BUILD LAYER. This file is the reason the rebuild is worth it.
+
+   Tailwind v4 generates utilities ONLY from @theme keys.
+     • Colors on a plain :root  → no `bg-surface` utility exists at all.
+       (Apr28_Frontend.sh does this, which is why its components are written
+       almost entirely in style={{ background: 'var(--color-surface)' }}.)
+     • Colors inside plain @theme → utilities exist, but the value is inlined
+       at build time, so `dark:` and runtime theme switching cannot work.
+       (Tailwind-injection.sh does this.)
+
+   `@theme inline` is the resolution. It emits
+       .bg-surface { background-color: var(--semantic-surface) }
+   rather than the resolved color — real utilities AND runtime switching from
+   a single declaration. Every inline style in the old frontend script becomes
+   unnecessary.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Dark mode: match .dark and everything inside it. Paired with the inline
+   script in layout.tsx, which writes data-theme (source of truth, extensible to
+   a third theme) AND mirrors .dark (so shadcn/Base UI and Tailwind's own dark:
+   variant work unmodified). Shipping both selectors costs one line and ends the
+   Theme_awareness.md-vs-scripts disagreement permanently. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  /* ── The role contract ──────────────────────────────────────────────────
+     Every name here is a utility: bg-surface, text-text-muted,
+     border-border-strong, ring-primary, … */
+  --color-bg:             var(--semantic-bg);
+  --color-bg-alt:         var(--semantic-bg-alt);
+  --color-surface:        var(--semantic-surface);
+  --color-surface-alt:    var(--semantic-surface-alt);
+  --color-surface-raised: var(--semantic-surface-raised);
+
+  --color-text:        var(--semantic-text);
+  --color-text-muted:  var(--semantic-text-muted);
+  --color-text-subtle: var(--semantic-text-subtle);
+  --color-on-primary:  var(--semantic-on-primary);
+
+  --color-border:        var(--semantic-border);
+  --color-border-strong: var(--semantic-border-strong);
+  --color-border-subtle: var(--semantic-border-subtle);
+
+  --color-primary:        var(--semantic-primary);
+  --color-primary-hover:  var(--semantic-primary-hover);
+  --color-primary-active: var(--semantic-primary-active);
+  --color-primary-muted:  var(--semantic-primary-muted);
+
+  --color-success: var(--semantic-success);
+  --color-warning: var(--semantic-warning);
+  --color-danger:  var(--semantic-danger);
+  --color-info:    var(--semantic-info);
+
+  --color-overlay: var(--semantic-overlay);
+
+  /* ── shadcn/Base UI aliases — see tokens/shadcn-compat.css ───────────── */
+  --color-background:             var(--semantic-background);
+  --color-foreground:             var(--semantic-foreground);
+  --color-card:                   var(--semantic-card);
+  --color-card-foreground:        var(--semantic-card-foreground);
+  --color-popover:                var(--semantic-popover);
+  --color-popover-foreground:     var(--semantic-popover-foreground);
+  --color-primary-foreground:     var(--semantic-primary-foreground);
+  --color-secondary:              var(--semantic-secondary);
+  --color-secondary-foreground:   var(--semantic-secondary-foreground);
+  --color-muted:                  var(--semantic-muted);
+  --color-muted-foreground:       var(--semantic-muted-foreground);
+  --color-accent:                 var(--semantic-accent);
+  --color-accent-foreground:      var(--semantic-accent-foreground);
+  --color-destructive:            var(--semantic-destructive);
+  --color-destructive-foreground: var(--semantic-destructive-foreground);
+  --color-input:                  var(--semantic-input);
+  --color-ring:                   var(--semantic-ring);
+  --color-chart-1: var(--semantic-chart-1);
+  --color-chart-2: var(--semantic-chart-2);
+  --color-chart-3: var(--semantic-chart-3);
+  --color-chart-4: var(--semantic-chart-4);
+  --color-chart-5: var(--semantic-chart-5);
+
+  /* ── Radius — sharp, except the one that must stay round ─────────────── */
+  --radius-sm:   var(--semantic-radius-sm);
+  --radius-md:   var(--semantic-radius-md);
+  --radius-lg:   var(--semantic-radius-lg);
+  --radius-xl:   var(--semantic-radius-xl);
+  --radius-full: 9999px;
+
+  /* ── Type stacks ─────────────────────────────────────────────────────── */
+  --font-sans: var(--semantic-font-sans);
+  --font-mono: var(--semantic-font-mono);
+
+  /* ── Elevation ───────────────────────────────────────────────────────── */
+  --shadow-sm: var(--semantic-shadow-sm);
+  --shadow-md: var(--semantic-shadow-md);
+  --shadow-lg: var(--semantic-shadow-lg);
+
+  /* ── Easing ──────────────────────────────────────────────────────────── */
+  --ease-smooth: var(--primitive-ease-smooth);
+  --ease-spring: var(--primitive-ease-spring);
+}

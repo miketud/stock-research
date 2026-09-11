@@ -1,0 +1,215 @@
+{
+  "manifestVersion": 1,
+  "base": {
+    "version": "1.0.0",
+    "appliedAt": "2026-09-11T08:56:05.417Z"
+  },
+  "capabilities": {
+    "tokens.contract": {
+      "version": "1.0.0",
+      "provider": "base",
+      "roles": {
+        "color": [
+          "bg",
+          "bg-alt",
+          "surface",
+          "surface-alt",
+          "surface-raised",
+          "text",
+          "text-muted",
+          "text-subtle",
+          "on-primary",
+          "border",
+          "border-strong",
+          "border-subtle",
+          "primary",
+          "primary-hover",
+          "primary-active",
+          "primary-muted",
+          "success",
+          "warning",
+          "danger",
+          "info",
+          "overlay"
+        ]
+      }
+    },
+    "theme.mechanism": {
+      "version": "1.0.0",
+      "provider": "base",
+      "selectors": [
+        "data-theme",
+        ".dark"
+      ]
+    },
+    "providers.registry": {
+      "version": "1.0.0",
+      "provider": "base"
+    },
+    "extensions.header-actions": {
+      "version": "1.0.0",
+      "provider": "base"
+    },
+    "nav.registry": {
+      "version": "1.0.0",
+      "provider": "base"
+    },
+    "styles.layers": {
+      "version": "1.0.0",
+      "provider": "base"
+    }
+  },
+  "files": {
+    ".gitignore": {
+      "class": "base",
+      "owner": "base"
+    },
+    ".prettierrc": {
+      "class": "base",
+      "owner": "base"
+    },
+    "README.md": {
+      "class": "base-replaceable",
+      "owner": "base"
+    },
+    "backend/tsconfig.json": {
+      "class": "base",
+      "owner": "base"
+    },
+    "backend/eslint.config.mjs": {
+      "class": "base",
+      "owner": "base"
+    },
+    "backend/.env.example": {
+      "class": "region",
+      "owner": "base"
+    },
+    "backend/src/app.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "backend/src/server.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "backend/src/env.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "backend/src/plugins/cors.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "backend/src/routes/health.route.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/styles/tokens/primitives.css": {
+      "class": "region",
+      "owner": "base"
+    },
+    "frontend/src/styles/tokens/semantic.css": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/styles/tokens/components.css": {
+      "class": "region",
+      "owner": "base"
+    },
+    "frontend/src/styles/tokens/shadcn-compat.css": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/styles/theme.css": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/app/globals.css": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/components.json": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/lib/extensions.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/lib/nav.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/lib/theme-script.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/lib/theme-context.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/providers/00-ThemeProvider.tsx": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/hooks/useTheme.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/app/providers.tsx": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/extensions/header-actions/00-theme-toggle.tsx": {
+      "class": "base-replaceable",
+      "owner": "base"
+    },
+    "frontend/src/components/ExtensionPoint.tsx": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/components/layout/SiteHeader.tsx": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/nav/10-info.nav.ts": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/app/fonts.ts": {
+      "class": "base-replaceable",
+      "owner": "base"
+    },
+    "frontend/src/app/layout.tsx": {
+      "class": "base",
+      "owner": "base"
+    },
+    "frontend/src/app/page.tsx": {
+      "class": "base-replaceable",
+      "owner": "base"
+    },
+    "frontend/src/app/info/page.tsx": {
+      "class": "base-replaceable",
+      "owner": "base"
+    },
+    "frontend/src/providers/index.generated.ts": {
+      "class": "generated",
+      "owner": "base"
+    },
+    "frontend/src/extensions/header-actions/index.generated.ts": {
+      "class": "generated",
+      "owner": "base"
+    },
+    "frontend/src/nav/nav.generated.ts": {
+      "class": "generated",
+      "owner": "base"
+    },
+    "frontend/src/styles/layers/index.generated.css": {
+      "class": "generated",
+      "owner": "base"
+    }
+  },
+  "regions": {},
+  "injections": {},
+  "packages": {}
+}

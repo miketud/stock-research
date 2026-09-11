@@ -1,0 +1,10 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   TIER 3 — COMPONENT TOKENS.  class:region.
+   Component-scoped variables that are not worth promoting to the semantic
+   contract. Each injection writes its own region; the base ships one empty.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* >>> bootstrap:region tokens.components owner=base v=1.0.0 */
+  /* <<< bootstrap:region tokens.components */
+}

@@ -1,0 +1,50 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   class:base — shadcn/Base UI reconciliation.
+
+   `shadcn init` writes its own token set into globals.css. The old
+   Tailwind-injection.sh then overwrote globals.css wholesale, which is why any
+   component added with `shadcn add` afterwards rendered unstyled.
+
+   Instead: the base owns the reconciliation once. Every name a shadcn component
+   expects is defined here as an alias onto a semantic role, so a component
+   copied straight from the registry themes correctly with no edits, and there
+   is nothing left for an injection to fight over.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --semantic-background:            var(--semantic-bg);
+  --semantic-foreground:            var(--semantic-text);
+  --semantic-card:                  var(--semantic-surface);
+  --semantic-card-foreground:       var(--semantic-text);
+  --semantic-popover:               var(--semantic-surface-raised);
+  --semantic-popover-foreground:    var(--semantic-text);
+  --semantic-primary-foreground:    var(--semantic-on-primary);
+  --semantic-secondary:             var(--semantic-surface-alt);
+  --semantic-secondary-foreground:  var(--semantic-text);
+  --semantic-muted:                 var(--semantic-surface-alt);
+  --semantic-muted-foreground:      var(--semantic-text-muted);
+  --semantic-accent:                var(--semantic-surface-alt);
+  --semantic-accent-foreground:     var(--semantic-text);
+  --semantic-destructive:           var(--semantic-danger);
+  --semantic-destructive-foreground: var(--semantic-on-primary);
+  --semantic-input:                 var(--semantic-border);
+  --semantic-ring:                  var(--semantic-primary);
+
+  /* shadcn derives its own radii from --radius. Sharp corners, everywhere. */
+  --radius: 0rem;
+
+  /* Chart colors — declared so `shadcn add chart` resolves. */
+  --semantic-chart-1: var(--primitive-brand-500);
+  --semantic-chart-2: var(--primitive-info-500);
+  --semantic-chart-3: var(--primitive-success-500);
+  --semantic-chart-4: var(--primitive-warning-500);
+  --semantic-chart-5: var(--primitive-danger-500);
+}
+
+.dark {
+  --semantic-chart-1: var(--primitive-brand-400);
+  --semantic-chart-2: var(--primitive-info-400);
+  --semantic-chart-3: var(--primitive-success-400);
+  --semantic-chart-4: var(--primitive-warning-400);
+  --semantic-chart-5: var(--primitive-danger-400);
+}

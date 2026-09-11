@@ -1,0 +1,35 @@
+{
+  "name": "stock-research-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "gen:barrels": "node ../.bootstrap/bin/gen_barrels.mjs --root .. --quiet",
+    "predev": "pnpm gen:barrels",
+    "prebuild": "pnpm gen:barrels",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "class-variance-authority": "^0.7.1",
+    "cn": "^0.2.6",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.30.3"
+}

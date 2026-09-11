@@ -1,0 +1,110 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   TIER 2 — SEMANTIC.  class:base — THIS IS THE CONTRACT.
+   Base owns WHICH roles exist; an injection owns what color they are.
+   The role names here are mirrored in the manifest as
+   capabilities.tokens.contract.roles, so an injection can assert a role exists
+   BEFORE writing className="bg-surface-alt".
+
+   Naming: --semantic-* is the RUNTIME layer. It is deliberately NOT --color-*,
+   which is Tailwind's @theme namespace — a color declared as --color-x on a
+   plain :root looks like a token and generates nothing, which is exactly the
+   bug in Apr28_Frontend.sh. theme.css maps these into --color-* via
+   `@theme inline`.
+
+   Light lives on :root; dark overrides under .dark. layout.tsx server-renders
+   <html class="dark">, so dark is the default even with JavaScript disabled,
+   and the inline script removes the class when the stored theme is light.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --semantic-bg:             var(--primitive-neutral-50);
+  --semantic-bg-alt:         var(--primitive-neutral-100);
+  --semantic-surface:        var(--primitive-neutral-0);
+  --semantic-surface-alt:    var(--primitive-neutral-100);
+  --semantic-surface-raised: var(--primitive-neutral-0);
+
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --semantic-text:        var(--primitive-neutral-950);
+  --semantic-text-muted:  var(--primitive-neutral-600);
+  --semantic-text-subtle: var(--primitive-neutral-400);
+  --semantic-on-primary:  var(--primitive-neutral-0);
+
+  /* ── Borders ──────────────────────────────────────────────────────────── */
+  --semantic-border:        var(--primitive-neutral-200);
+  --semantic-border-strong: var(--primitive-neutral-300);
+  --semantic-border-subtle: var(--primitive-neutral-100);
+
+  /* ── Brand ────────────────────────────────────────────────────────────── */
+  --semantic-primary:        var(--primitive-brand-500);
+  --semantic-primary-hover:  var(--primitive-brand-600);
+  --semantic-primary-active: var(--primitive-brand-700);
+  --semantic-primary-muted:  oklch(55% 0.20 250 / 0.12);
+
+  /* ── Status ───────────────────────────────────────────────────────────── */
+  /* In the contract because the agent injection hardcodes text-red-400 /
+     bg-green-400 / text-white, none of which can respond to a theme. */
+  --semantic-success: var(--primitive-success-500);
+  --semantic-warning: var(--primitive-warning-500);
+  --semantic-danger:  var(--primitive-danger-500);
+  --semantic-info:    var(--primitive-info-500);
+
+  /* ── Scrims ───────────────────────────────────────────────────────────── */
+  --semantic-overlay: oklch(0% 0 0 / 0.55);
+
+  /* ── Radius — SHARP CORNERS ───────────────────────────────────────────── */
+  /* The whole scale collapses to zero. --radius-full stays circular because
+     status dots, typing indicators and avatars must remain round. */
+  --semantic-radius-sm: 0px;
+  --semantic-radius-md: 0px;
+  --semantic-radius-lg: 0px;
+  --semantic-radius-xl: 0px;
+
+  /* ── Type stacks — sizes live in the ui_ux injection ──────────────────── */
+  --semantic-font-sans: var(--font-app-sans), ui-sans-serif, system-ui, sans-serif;
+  --semantic-font-mono: var(--font-app-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* ── Motion ───────────────────────────────────────────────────────────── */
+  --semantic-transition-fast: var(--primitive-duration-fast) var(--primitive-ease-smooth);
+  --semantic-transition-base: var(--primitive-duration-base) var(--primitive-ease-smooth);
+  --semantic-transition-slow: var(--primitive-duration-slow) var(--primitive-ease-smooth);
+
+  /* ── Elevation ────────────────────────────────────────────────────────── */
+  --semantic-shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.06);
+  --semantic-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.08), 0 1px 3px oklch(0% 0 0 / 0.06);
+  --semantic-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.10), 0 4px 6px oklch(0% 0 0 / 0.06);
+}
+
+/* ── Dark — the default, server-rendered on <html class="dark"> ─────────── */
+.dark {
+  --semantic-bg:             var(--primitive-neutral-950);
+  --semantic-bg-alt:         var(--primitive-neutral-900);
+  --semantic-surface:        var(--primitive-neutral-900);
+  --semantic-surface-alt:    var(--primitive-neutral-800);
+  --semantic-surface-raised: var(--primitive-neutral-700);
+
+  --semantic-text:        var(--primitive-neutral-50);
+  --semantic-text-muted:  var(--primitive-neutral-400);
+  --semantic-text-subtle: var(--primitive-neutral-500);
+  --semantic-on-primary:  var(--primitive-neutral-0);
+
+  --semantic-border:        var(--primitive-neutral-800);
+  --semantic-border-strong: var(--primitive-neutral-600);
+  --semantic-border-subtle: var(--primitive-neutral-900);
+
+  --semantic-primary:        var(--primitive-brand-400);
+  --semantic-primary-hover:  var(--primitive-brand-300);
+  --semantic-primary-active: var(--primitive-brand-500);
+  --semantic-primary-muted:  oklch(66% 0.18 250 / 0.16);
+
+  --semantic-success: var(--primitive-success-400);
+  --semantic-warning: var(--primitive-warning-400);
+  --semantic-danger:  var(--primitive-danger-400);
+  --semantic-info:    var(--primitive-info-400);
+
+  --semantic-overlay: oklch(0% 0 0 / 0.72);
+
+  --semantic-shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.30);
+  --semantic-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.40), 0 1px 3px oklch(0% 0 0 / 0.30);
+  --semantic-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.50), 0 4px 6px oklch(0% 0 0 / 0.35);
+}

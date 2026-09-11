@@ -1,0 +1,87 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   class:base — the CSS entry point, and a singleton.
+
+   It contains imports and @layer base ONLY. Every previous script in this repo
+   fought over this file: shadcn init wrote tokens into it, the theme injection
+   overwrote it, and the agent injection appended keyframes to it. Now there is
+   nothing here to fight over — injections add a file to styles/layers/ and
+   the @import line below is generated.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@import "tailwindcss";
+
+@import "../styles/tokens/primitives.css";
+@import "../styles/tokens/semantic.css";
+@import "../styles/tokens/shadcn-compat.css";
+@import "../styles/tokens/components.css";
+@import "../styles/theme.css";
+@import "../styles/layers/index.generated.css";
+
+@layer base {
+  /* Tells the UA to render form controls and scrollbars for the active theme. */
+  :root      { color-scheme: light; }
+  :root.dark { color-scheme: dark; }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    border-color: var(--semantic-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--semantic-bg);
+    color: var(--semantic-text);
+    font-family: var(--semantic-font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Cross-fade the palette on theme change, but never on first paint and never
+     during the toggle's own class swap — see .no-transitions below. */
+  :root:not(.no-transitions) body,
+  :root:not(.no-transitions) body * {
+    transition:
+      background-color var(--semantic-transition-base),
+      border-color var(--semantic-transition-base),
+      color var(--semantic-transition-base);
+  }
+
+  .no-transitions,
+  .no-transitions * {
+    transition: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--semantic-primary);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--semantic-primary-muted);
+    color: var(--semantic-text);
+  }
+
+  img,
+  video,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+}
