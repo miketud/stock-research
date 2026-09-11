@@ -1,0 +1,81 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   ui_ux injection — type scale, easing and keyframes.
+   Reached from globals.css via styles/layers/index.generated.css.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* A plain @theme (not inline): these are literal values with no runtime layer
+   beneath them, so there is nothing to indirect through. */
+@theme {
+  /* Tightened tracking as size increases — optical correction, not decoration:
+     large type at default tracking reads loose. */
+  --text-xs:   0.75rem;
+  --text-sm:   0.8125rem;
+  --text-base: 0.9375rem;
+  --text-lg:   1.0625rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.375rem;
+  --text-5xl:  3.125rem;
+
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.018em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.04em;
+
+  --leading-tight:    1.15;
+  --leading-snug:     1.35;
+  --leading-normal:   1.55;
+  --leading-relaxed:  1.7;
+
+  --animate-fade-up: fade-up 0.5s var(--ease-smooth) both;
+  --animate-blink:   blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* ── Theme toggle ──────────────────────────────────────────────────────────
+   Decorative colors, so they are component tokens rather than semantic roles:
+   nothing else in the system needs a "sun". They live here rather than in
+   tokens/components.css because that file's region sits inside :root and these
+   need a .dark variant too.
+
+   --ui-toggle-cut must track the button's own background, or the crescent
+   stops being a crescent. */
+:root {
+  --ui-toggle-moon: oklch(38% 0.085 268);
+  --ui-toggle-sun:  oklch(78% 0.145 82);
+  --ui-toggle-cut:  var(--semantic-surface);
+}
+
+.dark {
+  --ui-toggle-moon: oklch(24% 0.045 268);
+  --ui-toggle-sun:  oklch(82% 0.150 82);
+}
+
+/* Motion animates cx, which is numeric and springs cleanly. Fill is a custom
+   property, which it cannot tween — so CSS carries that half of the change. */
+[data-ui-toggle] circle {
+  transition: fill var(--semantic-transition-base);
+}
+
+@layer base {
+  /* Headings carry the display treatment by default so component code does not
+     have to repeat it, and so it stays consistent when it is forgotten. */
+  h1, h2, h3 {
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}

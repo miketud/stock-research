@@ -57,6 +57,18 @@
     "styles.layers": {
       "version": "1.0.0",
       "provider": "base"
+    },
+    "ui.palette": {
+      "version": "1.0.0",
+      "provider": "ui_ux"
+    },
+    "ui.typography": {
+      "version": "1.0.0",
+      "provider": "ui_ux"
+    },
+    "ui.motion": {
+      "version": "1.0.0",
+      "provider": "ui_ux"
     }
   },
   "files": {
@@ -162,7 +174,8 @@
     },
     "frontend/src/extensions/header-actions/00-theme-toggle.tsx": {
       "class": "base-replaceable",
-      "owner": "base"
+      "owner": "base",
+      "replacedBy": "ui_ux"
     },
     "frontend/src/components/ExtensionPoint.tsx": {
       "class": "base",
@@ -178,7 +191,8 @@
     },
     "frontend/src/app/fonts.ts": {
       "class": "base-replaceable",
-      "owner": "base"
+      "owner": "base",
+      "replacedBy": "ui_ux"
     },
     "frontend/src/app/layout.tsx": {
       "class": "base",
@@ -186,7 +200,8 @@
     },
     "frontend/src/app/page.tsx": {
       "class": "base-replaceable",
-      "owner": "base"
+      "owner": "base",
+      "replacedBy": "ui_ux"
     },
     "frontend/src/app/info/page.tsx": {
       "class": "base-replaceable",
@@ -207,9 +222,35 @@
     "frontend/src/styles/layers/index.generated.css": {
       "class": "generated",
       "owner": "base"
+    },
+    "frontend/src/styles/layers/ui_ux.css": {
+      "class": "injection",
+      "owner": "ui_ux"
+    },
+    "frontend/src/components/motion/FadeIn.tsx": {
+      "class": "injection",
+      "owner": "ui_ux"
+    },
+    "frontend/src/components/motion/StaggerGroup.tsx": {
+      "class": "injection",
+      "owner": "ui_ux"
     }
   },
-  "regions": {},
-  "injections": {},
+  "regions": {
+    "frontend/src/styles/tokens/primitives.css#tokens.palette": {
+      "owner": "ui_ux",
+      "shared": false
+    },
+    "frontend/src/styles/tokens/components.css#tokens.components": {
+      "owner": "ui_ux",
+      "shared": false
+    }
+  },
+  "injections": {
+    "ui_ux": {
+      "version": "1.0.0",
+      "appliedAt": "2026-09-11T09:11:25.110Z"
+    }
+  },
   "packages": {}
 }

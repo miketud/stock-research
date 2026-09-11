@@ -9,38 +9,43 @@
    ───────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* >>> bootstrap:region tokens.palette owner=base v=1.0.0 */
-  /* Neutral scale */
+  /* >>> bootstrap:region tokens.palette owner=ui_ux v=1.0.0 */
+  /* Neutral scale — very slightly cool, so surfaces read as considered rather
+     than as an absence of color. Chroma 0.004 is below the threshold where a
+     hue is nameable but above where the grays look flat next to the brand. */
   --primitive-neutral-0:    oklch(100% 0 0);
-  --primitive-neutral-50:   oklch(97% 0 0);
-  --primitive-neutral-100:  oklch(93% 0 0);
-  --primitive-neutral-200:  oklch(87% 0 0);
-  --primitive-neutral-300:  oklch(76% 0 0);
-  --primitive-neutral-400:  oklch(62% 0 0);
-  --primitive-neutral-500:  oklch(50% 0 0);
-  --primitive-neutral-600:  oklch(39% 0 0);
-  --primitive-neutral-700:  oklch(29% 0 0);
-  --primitive-neutral-800:  oklch(20% 0 0);
-  --primitive-neutral-900:  oklch(14% 0 0);
-  --primitive-neutral-950:  oklch(9% 0 0);
+  --primitive-neutral-50:   oklch(98.2% 0.003 258);
+  --primitive-neutral-100:  oklch(96.0% 0.004 258);
+  --primitive-neutral-200:  oklch(91.5% 0.005 258);
+  --primitive-neutral-300:  oklch(83.0% 0.006 258);
+  --primitive-neutral-400:  oklch(67.0% 0.008 258);
+  --primitive-neutral-500:  oklch(55.0% 0.009 258);
+  --primitive-neutral-600:  oklch(44.0% 0.009 258);
+  --primitive-neutral-700:  oklch(33.5% 0.008 258);
+  --primitive-neutral-800:  oklch(25.0% 0.007 258);
+  --primitive-neutral-900:  oklch(18.0% 0.006 258);
+  --primitive-neutral-950:  oklch(12.5% 0.006 258);
   --primitive-neutral-1000: oklch(0% 0 0);
 
-  /* Brand scale — neutral placeholder hue; ui_ux replaces this whole region */
-  --primitive-brand-300: oklch(78% 0.15 250);
-  --primitive-brand-400: oklch(66% 0.18 250);
-  --primitive-brand-500: oklch(55% 0.20 250);
-  --primitive-brand-600: oklch(44% 0.19 250);
-  --primitive-brand-700: oklch(34% 0.17 250);
+  /* Brand — a single hue at constant chroma, stepped only in lightness, so the
+     ramp stays perceptually even and the hover state is a real step rather than
+     a guess. */
+  --primitive-brand-300: oklch(82% 0.115 256);
+  --primitive-brand-400: oklch(72% 0.145 256);
+  --primitive-brand-500: oklch(62% 0.170 256);
+  --primitive-brand-600: oklch(52% 0.165 256);
+  --primitive-brand-700: oklch(42% 0.145 256);
 
-  /* Status */
-  --primitive-danger-400:  oklch(65% 0.22 25);
-  --primitive-danger-500:  oklch(54% 0.24 25);
-  --primitive-success-400: oklch(68% 0.18 145);
-  --primitive-success-500: oklch(56% 0.20 145);
-  --primitive-warning-400: oklch(75% 0.18 75);
-  --primitive-warning-500: oklch(64% 0.20 75);
-  --primitive-info-400:    oklch(70% 0.14 230);
-  --primitive-info-500:    oklch(58% 0.16 230);
+  /* Status — hue-separated far enough to survive the common forms of color
+     blindness, and lightness-separated so they still differ in grayscale. */
+  --primitive-danger-400:  oklch(68% 0.185 27);
+  --primitive-danger-500:  oklch(57% 0.205 27);
+  --primitive-success-400: oklch(74% 0.145 156);
+  --primitive-success-500: oklch(62% 0.155 156);
+  --primitive-warning-400: oklch(82% 0.145 82);
+  --primitive-warning-500: oklch(71% 0.155 82);
+  --primitive-info-400:    oklch(76% 0.115 232);
+  --primitive-info-500:    oklch(64% 0.130 232);
   /* <<< bootstrap:region tokens.palette */
 
   /* ── Non-color primitives — base-owned, outside the region ─────────────── */

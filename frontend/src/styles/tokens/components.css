@@ -5,6 +5,9 @@
    ───────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* >>> bootstrap:region tokens.components owner=base v=1.0.0 */
+  /* >>> bootstrap:region tokens.components owner=ui_ux v=1.0.0 */
+  --ui-header-height: 3.5rem;
+  --ui-content-width: 64rem;
+  --ui-gutter: 1.5rem;
   /* <<< bootstrap:region tokens.components */
 }

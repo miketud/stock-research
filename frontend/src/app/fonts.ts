@@ -1,23 +1,18 @@
-// class:base-replaceable — font LOADING is base, the type SCALE is injection.
+// Replaced by the ui_ux injection.
 //
-// next/font must be called at module scope and its result applied to <html> in
-// layout.tsx, which the base owns. Sizes, leading and tracking are just tokens
-// and belong to whichever injection owns the look.
-//
-// The CSS variable names below are the CONTRACT: semantic.css is class:base and
-// hash-frozen, so it can only refer to --font-app-sans / --font-app-mono. An
-// injection replacing this file may load any families it likes, as long as it
-// exposes them under those two names.
+// --font-app-sans / --font-app-mono are the contract semantic.css depends on;
+// the families behind them are this injection's choice.
 
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 
-export const fontSans = Geist({
+export const fontSans = Inter({
   variable: '--font-app-sans',
   subsets: ['latin'],
   display: 'swap',
+  axes: ['opsz'],
 });
 
-export const fontMono = Geist_Mono({
+export const fontMono = JetBrains_Mono({
   variable: '--font-app-mono',
   subsets: ['latin'],
   display: 'swap',
