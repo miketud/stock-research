@@ -148,10 +148,6 @@
       "class": "base",
       "owner": "base"
     },
-    "frontend/src/lib/nav.ts": {
-      "class": "base",
-      "owner": "base"
-    },
     "frontend/src/lib/theme-script.ts": {
       "class": "base",
       "owner": "base"
@@ -181,11 +177,7 @@
       "class": "base",
       "owner": "base"
     },
-    "frontend/src/components/layout/SiteHeader.tsx": {
-      "class": "base",
-      "owner": "base"
-    },
-    "frontend/src/nav/10-info.nav.ts": {
+    "frontend/src/components/layout/NavBar.tsx": {
       "class": "base",
       "owner": "base"
     },
@@ -203,19 +195,11 @@
       "owner": "base",
       "replacedBy": "ui_ux"
     },
-    "frontend/src/app/info/page.tsx": {
-      "class": "base-replaceable",
-      "owner": "base"
-    },
     "frontend/src/providers/index.generated.ts": {
       "class": "generated",
       "owner": "base"
     },
     "frontend/src/extensions/header-actions/index.generated.ts": {
-      "class": "generated",
-      "owner": "base"
-    },
-    "frontend/src/nav/nav.generated.ts": {
       "class": "generated",
       "owner": "base"
     },
@@ -232,6 +216,10 @@
       "owner": "ui_ux"
     },
     "frontend/src/components/motion/StaggerGroup.tsx": {
+      "class": "injection",
+      "owner": "ui_ux"
+    },
+    "backend/src/routes/sec.route.ts": {
       "class": "injection",
       "owner": "ui_ux"
     }

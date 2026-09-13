@@ -23,7 +23,7 @@ import './globals.css';
 
 import { fontVariables } from './fonts';
 import { Providers } from './providers';
-import { SiteHeader } from '@/components/layout/SiteHeader';
+import { NavBar } from '@/components/layout/NavBar';
 import { themeInitScript } from '@/lib/theme-script';
 
 export const metadata: Metadata = {
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-dvh bg-bg font-sans text-text antialiased">
         <Providers>
-          <SiteHeader />
+          <NavBar />
           <main>{children}</main>
         </Providers>
       </body>

@@ -1,113 +1,154 @@
-// Replaced by the ui_ux injection.
-//
-// Same content as the base page; the difference is the entrance. The spec list
-// staggers in beside the description rather than every row appearing at once —
-// a list animating as one gesture reads as a single object, where n independent
-// fades read as n things arriving separately.
+'use client';
 
-
+import { useState, useEffect } from 'react';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 
-const spec: Array<[string, string]> = [
-  ['Runtime', 'Node 22+'],
-  ['Modules', 'ESM, NodeNext resolution'],
-  ['API', 'Fastify 5, @fastify/autoload 6'],
-  ['Validation', 'zod 4, parsed at startup'],
-  ['Framework', 'Next.js 16, React 19'],
-  ['Compiler', 'React Compiler enabled'],
-  ['Styling', 'Tailwind CSS v4'],
-  ['Components', 'Base UI, via the shadcn registry'],
-  ['Motion', 'motion 12, reduced-motion aware'],
-  ['Packages', 'pnpm, one lockfile per workspace'],
-];
+interface Filing {
+  type: string;
+  accessionNumber: string;
+  fileDate: string;
+  documentFormType?: string;
+  size: number;
+  url: string;
+}
 
-const backend: Array<[string, string]> = [
-  ['src/routes/*.route.ts', 'Autoloaded. export const autoPrefix sets the mount path; files at the root mount at /.'],
-  ['src/plugins/*.ts', 'Autoloaded before routes and not encapsulated, so a plugin applies app-wide.'],
-  ['src/env.ts', 'NODE_ENV, HOST, PORT, LOG_LEVEL, CORS_ORIGIN. Invalid values exit non-zero at startup.'],
-  ['src/app.ts', 'Registers autoload twice and nothing else. No route is named in it.'],
-  ['GET /health', 'Returns a status payload. Unknown paths return 404.'],
-  ['pnpm build', 'tsc to dist/. Autoload resolves via import.meta.dirname, so it discovers dist/routes at runtime.'],
-  ['Port', 'Fixed at PORT. On EADDRINUSE it reports the holding PID rather than moving to another port.'],
-];
-
-const frontend: Array<[string, string]> = [
-  ['styles/tokens/primitives.css', 'Raw oklch scales. Neutral, brand and status ramps. Not referenced by components.'],
-  ['styles/tokens/semantic.css', 'Roles as --semantic-* on :root, overridden under .dark. This is the contract.'],
-  ['styles/theme.css', '@theme inline maps each role to --color-<role>, so utilities exist and still switch at runtime.'],
-  ['styles/layers/ui_ux.css', 'Type scale, keyframes and the toggle tokens. Imported through a generated index.'],
-  ['Radius', 'sm/md/lg/xl all compute to 0. --radius-full stays 9999px for dots and avatars.'],
-  ['Theme', 'An inline script in the document head writes data-theme and mirrors .dark before first paint.'],
-  ['components/motion/', 'FadeIn and StaggerGroup. Both no-op under prefers-reduced-motion.'],
-];
-
-function Section({ title, rows }: { title: string; rows: Array<[string, string]> }) {
-  return (
-    <FadeIn>
-      <section className="border-t border-border py-12">
-        <h2 className="text-xs font-medium uppercase tracking-wide text-text-subtle">{title}</h2>
-        <dl className="mt-5 divide-y divide-border border border-border">
-          {rows.map(([key, value]) => (
-            <div key={key} className="grid gap-1.5 p-4 sm:grid-cols-[20rem_1fr] sm:gap-6">
-              <dt className="font-mono text-xs leading-relaxed text-text">{key}</dt>
-              <dd className="text-sm leading-relaxed text-text-muted">{value}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-    </FadeIn>
-  );
+interface SECResponse {
+  company_id: string;
+  cik: string;
+  entityName: string;
+  filings: Filing[];
 }
 
 export default function Home() {
+  const [ticker, setTicker] = useState('');
+  const [data, setData] = useState<SECResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchFilings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ticker) return;
+
+    setLoading(true);
+    setError(null);
+    setData(null);
+
+    try {
+      const res = await fetch(`/api/sec/filings?ticker=${encodeURIComponent(ticker)}&limit=100`);
+      if (!res.ok) throw new Error(`Error fetching filings: ${res.statusText}`);
+      const json: SECResponse = await res.json();
+      setData(json);
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="mx-auto w-full max-w-5xl px-6">
-      <section className="grid gap-10 border-b border-border py-20 md:grid-cols-[1fr_18rem] md:gap-16">
-        <FadeIn>
-          <h1 className="text-3xl font-semibold tracking-tighter text-text">
-            Fastify and Next.js in one repository
-          </h1>
-          <div className="mt-5 space-y-4 text-sm leading-relaxed text-text-muted">
-            <p>
-              Two pnpm workspaces with independent lockfiles and builds. The backend registers no
-              route by name: <code className="font-mono text-text">src/app.ts</code> mounts autoload
-              over <code className="font-mono text-text">plugins/</code> and{' '}
-              <code className="font-mono text-text">routes/</code>, and resolves those directories
-              through <code className="font-mono text-text">import.meta.dirname</code>, so the same
-              file works under <code className="font-mono text-text">tsx watch</code> and from{' '}
-              <code className="font-mono text-text">dist/</code>.
-            </p>
-            <p>
-              Color flows through two tiers. Roles are declared as{' '}
-              <code className="font-mono text-text">--semantic-*</code> on{' '}
-              <code className="font-mono text-text">:root</code> and{' '}
-              <code className="font-mono text-text">.dark</code>, then mapped into Tailwind through{' '}
-              <code className="font-mono text-text">@theme inline</code>, which emits{' '}
-              <code className="font-mono text-text">var()</code> rather than a resolved value. So
-              utilities exist at build time and still respond to a theme change at runtime, and no
-              component needs an inline style.
-            </p>
-            <p>
-              Both workspaces typecheck, lint and build with zero errors. A ten-check conformance
-              suite runs against the result; one check compiles the real CSS entry and fails on any
-              class the source uses that Tailwind does not generate.
-            </p>
+    <div className="mx-auto w-full max-w-5xl px-6 py-12 font-sans">
+      <FadeIn>
+        <div className="mb-12 border-4 border-text p-6 bg-surface shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <h1 className="text-5xl font-black tracking-tighter text-text mb-2">STOCK RESEARCH</h1>
+          <p className="text-lg font-medium text-text-muted">
+            Direct access to SEC EDGAR filings. No noise.
+          </p>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={0.1}>
+        <form onSubmit={fetchFilings} className="mb-12 flex gap-4">
+          <input
+            type="text"
+            value={ticker}
+            onChange={(e) => setTicker(e.target.value.toUpperCase())}
+            placeholder="Enter Ticker (e.g. AAPL)"
+            className="flex-1 border-4 border-text bg-surface px-4 py-3 text-xl font-bold text-text placeholder:text-text-muted focus:outline-none focus:ring-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all focus:translate-x-1 focus:translate-y-1 focus:shadow-none"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="border-4 border-text bg-green-500 px-8 py-3 text-xl font-black text-text shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
+          >
+            {loading ? '...' : 'SEARCH'}
+          </button>
+        </form>
+      </FadeIn>
+
+      {error && (
+        <FadeIn delay={0.2}>
+          <div className="mb-12 border-4 border-red-500 bg-red-50 p-4 text-red-600 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            {error}
           </div>
         </FadeIn>
+      )}
 
-        <StaggerGroup className="space-y-3 md:border-l md:border-border md:pl-8">
-          {spec.map(([key, value]) => (
-            <StaggerItem key={key}>
-              <p className="text-xs uppercase tracking-wide text-text-subtle">{key}</p>
-              <p className="mt-0.5 text-sm text-text">{value}</p>
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
-      </section>
+      {data && (
+        <FadeIn delay={0.2}>
+          <div className="mb-6 flex items-baseline justify-between border-b-4 border-text pb-2">
+            <h2 className="text-3xl font-black text-text">
+              {data.entityName}{' '}
+              <span className="text-lg font-medium text-text-muted">({ticker})</span>
+            </h2>
+            <span className="font-mono text-sm font-bold text-text-muted">CIK: {data.cik}</span>
+          </div>
 
-      <Section title="Backend" rows={backend} />
-      <Section title="Frontend" rows={frontend} />
+          <div className="overflow-x-auto border-4 border-text bg-surface shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b-4 border-text bg-text text-surface text-lg font-black">
+                  <th className="px-4 py-3">FORM</th>
+                  <th className="px-4 py-3">DATE</th>
+                  <th className="px-4 py-3">SIZE</th>
+                  <th className="px-4 py-3 text-right">LINK</th>
+                </tr>
+              </thead>
+              <tbody>
+                <StaggerGroup>
+                  {data.filings.length === 0 ? (
+                    <StaggerItem>
+                      <tr>
+                        <td colSpan={4} className="px-4 py-8 text-center font-bold text-text-muted">
+                          No filings found for this ticker.
+                        </td>
+                      </tr>
+                    </StaggerItem>
+                  ) : (
+                    data.filings
+                      .sort(
+                        (a, b) => new Date(b.fileDate).getTime() - new Date(a.fileDate).getTime()
+                      )
+                      .map((filing) => (
+                        <StaggerItem key={filing.accessionNumber}>
+                          <tr className="border-b-2 border-border hover:bg-green-50 transition-colors group">
+                            <td className="px-4 py-3 font-mono font-bold text-green-600">
+                              {filing.type}
+                            </td>
+                            <td className="px-4 py-3 font-medium text-text">{filing.fileDate}</td>
+                            <td className="px-4 py-3 text-sm font-mono text-text-muted">
+                              {(filing.size / 1024).toFixed(1)} KB
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              <a
+                                href={filing.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block border-2 border-text bg-surface px-3 py-1 text-sm font-black text-text shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:bg-white transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+                              >
+                                VIEW
+                              </a>
+                            </td>
+                          </tr>
+                        </StaggerItem>
+                      ))
+                  )}
+                </StaggerGroup>
+              </tbody>
+            </table>
+          </div>
+        </FadeIn>
+      )}
     </div>
   );
 }
