@@ -30,9 +30,13 @@ export default function ThemeToggle() {
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       aria-pressed={isDark}
       data-ui-toggle
-      className="-mr-1.5 inline-flex h-10 w-10 items-center justify-center transition-opacity hover:opacity-75 focus-visible:ring-2 focus-visible:ring-primary"
+      // Last cell of the nav's key strip: same height and hairline border, no
+      // raised-button treatment. Background stays bg-surface on hover — the
+      // crescent is cut with the button's own background color, so a hover
+      // fill would break the moon.
+      className="inline-flex h-7 w-10 items-center justify-center border border-border bg-surface text-text transition-colors hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
     >
-      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden>
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
         {/* Back: the moon body. Never moves. */}
         <circle cx="12" cy="12" r="6" fill="var(--ui-toggle-moon)" />
 
@@ -45,9 +49,7 @@ export default function ThemeToggle() {
           fill={isDark ? 'var(--ui-toggle-sun)' : 'var(--ui-toggle-cut)'}
           initial={false}
           animate={{ cx: sunCx }}
-          transition={
-            reduce ? { duration: 0 } : { type: 'spring', stiffness: 420, damping: 34 }
-          }
+          transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 420, damping: 34 }}
         />
       </svg>
     </button>

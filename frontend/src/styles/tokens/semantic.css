@@ -17,29 +17,36 @@
    ───────────────────────────────────────────────────────────────────────────── */
 
 :root {
+  /* Light is "solar forward": warm paper rather than white, lit from the same
+     amber the brand uses, so the accent belongs to the page instead of sitting
+     on it. Surfaces carry a trace of chroma at hue 82-88 — enough to read as
+     daylight, far below where it reads as a colored theme. */
+
   /* ── Surfaces ─────────────────────────────────────────────────────────── */
-  --semantic-bg: var(--primitive-neutral-50);
-  --semantic-bg-alt: var(--primitive-neutral-100);
-  --semantic-surface: var(--primitive-neutral-0);
-  --semantic-surface-alt: var(--primitive-neutral-100);
-  --semantic-surface-raised: var(--primitive-neutral-0);
+  --semantic-bg: oklch(97.4% 0.012 85);
+  --semantic-bg-alt: oklch(95.2% 0.016 83);
+  --semantic-surface: oklch(99.2% 0.006 88);
+  --semantic-surface-alt: oklch(96.3% 0.014 84);
+  --semantic-surface-raised: oklch(100% 0 0);
 
   /* ── Text ─────────────────────────────────────────────────────────────── */
-  --semantic-text: var(--primitive-neutral-950);
-  --semantic-text-muted: var(--primitive-neutral-600);
-  --semantic-text-subtle: var(--primitive-neutral-400);
-  --semantic-on-primary: var(--primitive-neutral-0);
+  --semantic-text: oklch(24% 0.018 60);
+  --semantic-text-muted: oklch(48% 0.02 64);
+  --semantic-text-subtle: oklch(64% 0.022 70);
+  --semantic-on-primary: oklch(99% 0.008 88);
 
   /* ── Borders ──────────────────────────────────────────────────────────── */
-  --semantic-border: var(--primitive-neutral-200);
-  --semantic-border-strong: var(--primitive-neutral-950);
-  --semantic-border-subtle: var(--primitive-neutral-100);
+  /* Strong is warm charcoal, not black: the heavy rules stay structural
+     without punching a hole in a warm page. */
+  --semantic-border: oklch(89.5% 0.014 80);
+  --semantic-border-strong: oklch(32% 0.028 58);
+  --semantic-border-subtle: oklch(93.5% 0.012 82);
 
   /* ── Brand ────────────────────────────────────────────────────────────── */
-  --semantic-primary: var(--primitive-brand-500);
-  --semantic-primary-hover: var(--primitive-brand-600);
+  --semantic-primary: var(--primitive-brand-600);
+  --semantic-primary-hover: var(--primitive-brand-700);
   --semantic-primary-active: var(--primitive-brand-700);
-  --semantic-primary-muted: oklch(55% 0.2 250 / 0.12);
+  --semantic-primary-muted: oklch(70% 0.17 58 / 0.14);
 
   /* ── Status ───────────────────────────────────────────────────────────── */
   /* In the contract because the agent injection hardcodes text-red-400 /
@@ -70,37 +77,51 @@
   --semantic-transition-slow: var(--primitive-duration-slow) var(--primitive-ease-smooth);
 
   /* ── Elevation ────────────────────────────────────────────────────────── */
+  /* The offset "hard" shadows this UI is built on were hardcoded to solid
+     black, which disappears against a near-black dark background. Tying them
+     to border-strong makes them the same rule as the border that casts them,
+     in either theme. */
+  --semantic-shadow-hard: 3px 3px 0 0 var(--semantic-border-strong);
+  --semantic-shadow-hard-lg: 6px 6px 0 0 var(--semantic-border-strong);
   --semantic-shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.06);
   --semantic-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.08), 0 1px 3px oklch(0% 0 0 / 0.06);
   --semantic-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.1), 0 4px 6px oklch(0% 0 0 / 0.06);
 }
 
-/* ── Dark — the default, server-rendered on <html class="dark"> ─────────── */
+/* ── Dark — Dracula, the default, server-rendered on <html class="dark") ──
+   Palette values are Dracula's own hex, not approximations: background #282a36,
+   current-line #44475a, comment #6272a4, foreground #f8f8f2, and the six
+   accents. Purple is the brand accent here; the warm amber ramp stays the
+   light theme's. */
 .dark {
-  --semantic-bg: var(--primitive-neutral-950);
-  --semantic-bg-alt: var(--primitive-neutral-900);
-  --semantic-surface: var(--primitive-neutral-900);
-  --semantic-surface-alt: var(--primitive-neutral-800);
-  --semantic-surface-raised: var(--primitive-neutral-700);
+  --semantic-bg: #1e1f29;
+  --semantic-bg-alt: #21222c;
+  --semantic-surface: #282a36;
+  --semantic-surface-alt: #343746;
+  --semantic-surface-raised: #44475a;
 
-  --semantic-text: var(--primitive-neutral-50);
-  --semantic-text-muted: var(--primitive-neutral-400);
-  --semantic-text-subtle: var(--primitive-neutral-500);
-  --semantic-on-primary: var(--primitive-neutral-0);
+  --semantic-text: #f8f8f2;
+  --semantic-text-muted: #b5b8d1;
+  /* Dracula's comment color — the palette's own "quiet" value. */
+  --semantic-text-subtle: #6272a4;
+  /* Purple is a light color: anything on it takes the background, not white. */
+  --semantic-on-primary: #282a36;
 
-  --semantic-border: var(--primitive-neutral-800);
-  --semantic-border-strong: var(--primitive-neutral-600);
-  --semantic-border-subtle: var(--primitive-neutral-900);
+  /* Current-line for rules, comment for the emphatic ones: panels separate
+     without a bright wireframe around every box. */
+  --semantic-border: #44475a;
+  --semantic-border-strong: #6272a4;
+  --semantic-border-subtle: #343746;
 
-  --semantic-primary: var(--primitive-brand-400);
-  --semantic-primary-hover: var(--primitive-brand-300);
-  --semantic-primary-active: var(--primitive-brand-500);
-  --semantic-primary-muted: oklch(66% 0.18 250 / 0.16);
+  --semantic-primary: #bd93f9;
+  --semantic-primary-hover: #d7b8ff;
+  --semantic-primary-active: #a679ec;
+  --semantic-primary-muted: rgb(189 147 249 / 0.16);
 
-  --semantic-success: var(--primitive-success-400);
-  --semantic-warning: var(--primitive-warning-400);
-  --semantic-danger: var(--primitive-danger-400);
-  --semantic-info: var(--primitive-info-400);
+  --semantic-success: #50fa7b;
+  --semantic-warning: #f1fa8c;
+  --semantic-danger: #ff5555;
+  --semantic-info: #8be9fd;
 
   --semantic-overlay: oklch(0% 0 0 / 0.72);
 

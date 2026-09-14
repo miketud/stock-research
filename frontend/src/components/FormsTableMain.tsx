@@ -36,6 +36,7 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
   const [sortKey, setSortKey] = useState<SortKey>('fileDate');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [expandedFilings, setExpandedFilings] = useState<Set<string>>(() => new Set());
+  const [panelOpen, setPanelOpen] = useState(true);
 
   const visibleFilings = useMemo(() => {
     const query = filter.trim().toLocaleLowerCase();
@@ -89,33 +90,65 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
   const hasScrollableFilings = visibleFilings.length > 10;
 
   return (
-    <section className="overflow-x-auto border-4 border-border-strong bg-surface shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-      <h2 className="research-panel-header border-b-4 border-border-strong px-4 py-3 text-lg font-black uppercase">
-        Forms Table
-      </h2>
-      <table className="block w-full min-w-[640px] border-collapse text-left">
+    <section className="overflow-x-auto border border-border bg-surface font-mono">
+      {/* The whole bar toggles the panel; the filter cell stops its own clicks
+          and keys so typing there never collapses the table. */}
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setPanelOpen((open) => !open)}
+        onKeyDown={(event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          setPanelOpen((open) => !open);
+        }}
+        aria-expanded={panelOpen}
+        aria-controls="forms-table-body"
+        title={panelOpen ? 'Collapse forms table' : 'Expand forms table'}
+        className="flex cursor-pointer flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-1.5 transition-colors hover:bg-surface-alt"
+      >
+        <div className="flex items-center gap-3">
+          <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">
+            Forms table
+          </h2>
+          <span className="text-sm leading-none text-text-subtle" aria-hidden="true">
+            {panelOpen ? '−' : '+'}
+          </span>
+        </div>
+        <div
+          onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => event.stopPropagation()}
+          className="flex cursor-auto flex-wrap items-center justify-end gap-3"
+        >
+          <label htmlFor="filing-filter" className="sr-only">
+            Filter forms
+          </label>
+          <input
+            id="filing-filter"
+            type="search"
+            value={filter}
+            onChange={(event) => {
+              setFilter(event.target.value);
+              // A filter you cannot see the results of is a dead control, so
+              // typing opens the table if it was collapsed.
+              if (event.target.value.trim()) setPanelOpen(true);
+            }}
+            placeholder="Filter Forms"
+            className="min-w-44 border border-border bg-bg px-2 py-0.5 font-mono text-[11px] text-text placeholder:text-text-subtle focus:border-primary focus:outline-none"
+          />
+          <span className="text-[10px] tabular-nums text-text-subtle" aria-live="polite">
+            {visibleFilings.length} / {filings.length}
+          </span>
+        </div>
+      </div>
+      <table
+        id="forms-table-body"
+        // The table is display:block for the scrollable tbody, so the hidden
+        // attribute alone would lose to that class — toggle the class itself.
+        className={`w-full min-w-[640px] border-collapse text-left ${panelOpen ? 'block' : 'hidden'}`}
+      >
         <thead className="block">
-          <tr className="table w-full table-fixed border-b-2 border-border bg-surface-alt text-text">
-            <th colSpan={3} className="h-[3.875rem] px-4 py-3">
-              <div className="flex items-center gap-3">
-                <label htmlFor="filing-filter" className="sr-only">
-                  Filter forms
-                </label>
-                <input
-                  id="filing-filter"
-                  type="search"
-                  value={filter}
-                  onChange={(event) => setFilter(event.target.value)}
-                  placeholder="Filter Forms"
-                  className="min-w-52 flex-1 border-2 border-border-strong bg-surface px-3 py-2 font-mono text-sm text-text placeholder:text-text-muted focus:outline-none"
-                />
-                <span className="shrink-0 font-mono text-xs text-text-muted" aria-live="polite">
-                  {visibleFilings.length} / {filings.length}
-                </span>
-              </div>
-            </th>
-          </tr>
-          <tr className="research-panel-header table w-full table-fixed border-b-4 border-border-strong text-lg font-black">
+          <tr className="table w-full table-fixed border-b border-border bg-bg-alt text-[10px] font-black uppercase tracking-[0.15em] text-text-subtle">
             {(
               [
                 ['type', 'FORM', 'text-left'],
@@ -127,15 +160,9 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                 key={key}
                 scope="col"
                 aria-sort={
-                  sortKey === key
-                    ? sortDirection === 'asc'
-                      ? 'ascending'
-                      : 'descending'
-                    : 'none'
+                  sortKey === key ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'
                 }
-                className={`h-14 px-4 py-3 ${alignment} ${
-                  key === 'type' ? 'w-[40%]' : 'w-[30%]'
-                }`}
+                className={`h-7 px-3 py-1 ${alignment} ${key === 'type' ? 'w-[40%]' : 'w-[30%]'}`}
               >
                 <button
                   type="button"
@@ -199,9 +226,9 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                       event.preventDefault();
                       toggleFiling(filing.accessionNumber);
                     }}
-                    className="group table h-14 w-full cursor-pointer table-fixed border-b-2 border-border transition-colors hover:bg-surface-alt focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
+                    className="group table h-8 w-full cursor-pointer table-fixed border-b border-border text-xs transition-colors hover:bg-surface-alt focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
                   >
-                    <td className="w-[40%] px-4 py-3 font-mono font-bold text-success">
+                    <td className="w-[40%] px-3 py-1 font-black text-primary">
                       <span className="mr-2 inline-block w-3 text-text-muted" aria-hidden="true">
                         {expanded ? '−' : '+'}
                       </span>
@@ -222,23 +249,23 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                           <span
                             id={`form-description-${filing.accessionNumber}`}
                             role="tooltip"
-                            className="pointer-events-none absolute left-0 top-full z-30 mt-2 w-64 border-2 border-border-strong bg-text px-3 py-2 font-sans text-xs font-bold text-surface opacity-0 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-opacity group-hover/form:opacity-100 group-focus-within/form:opacity-100"
+                            className="pointer-events-none absolute left-0 top-full z-30 mt-1 w-64 border border-border bg-bg-alt px-2 py-1 font-mono text-[10px] text-text opacity-0 transition-opacity group-hover/form:opacity-100 group-focus-within/form:opacity-100"
                           >
                             {filing.formDescription}
                           </span>
                         )}
                       </span>
                     </td>
-                    <td className="w-[30%] whitespace-nowrap px-4 py-3 font-medium tabular-nums text-text">
+                    <td className="w-[30%] whitespace-nowrap px-3 py-1 tabular-nums text-text-muted">
                       {filing.fileDate}
                     </td>
-                    <td className="w-[30%] px-4 py-3 text-right">
+                    <td className="w-[30%] px-3 py-1 text-right">
                       <a
                         href={filing.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(event) => event.stopPropagation()}
-                        className="inline-block border-2 border-border-strong bg-surface px-3 py-1 text-sm font-black text-text shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-surface-raised hover:shadow-none"
+                        className="inline-block border border-border px-2 py-0.5 text-[10px] font-black uppercase text-text-subtle transition-colors hover:border-primary hover:text-primary"
                       >
                         VIEW
                       </a>

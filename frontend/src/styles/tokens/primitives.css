@@ -10,42 +10,46 @@
 
 :root {
   /* >>> bootstrap:region tokens.palette owner=ui_ux v=1.0.0 */
-  /* Neutral scale — very slightly cool, so surfaces read as considered rather
-     than as an absence of color. Chroma 0.004 is below the threshold where a
-     hue is nameable but above where the grays look flat next to the brand. */
+  /* Neutral scale — true neutral (chroma 0). A classic terminal dark reads as
+     ink and paper, not as a tinted UI, so the only color on screen is the one
+     we deliberately put there. The dark end is spaced tightly (9 / 13 / 18 /
+     26%) so panels separate by a step of light rather than by an outline. */
   --primitive-neutral-0:    oklch(100% 0 0);
-  --primitive-neutral-50:   oklch(98.2% 0.003 258);
-  --primitive-neutral-100:  oklch(96.0% 0.004 258);
-  --primitive-neutral-200:  oklch(91.5% 0.005 258);
-  --primitive-neutral-300:  oklch(83.0% 0.006 258);
-  --primitive-neutral-400:  oklch(67.0% 0.008 258);
-  --primitive-neutral-500:  oklch(55.0% 0.009 258);
-  --primitive-neutral-600:  oklch(44.0% 0.009 258);
-  --primitive-neutral-700:  oklch(33.5% 0.008 258);
-  --primitive-neutral-800:  oklch(25.0% 0.007 258);
-  --primitive-neutral-900:  oklch(18.0% 0.006 258);
-  --primitive-neutral-950:  oklch(12.5% 0.006 258);
+  --primitive-neutral-50:   oklch(97.5% 0 0);
+  --primitive-neutral-100:  oklch(94.5% 0 0);
+  --primitive-neutral-200:  oklch(89.0% 0 0);
+  --primitive-neutral-300:  oklch(79.0% 0 0);
+  --primitive-neutral-400:  oklch(65.0% 0 0);
+  --primitive-neutral-500:  oklch(52.0% 0 0);
+  --primitive-neutral-600:  oklch(41.0% 0 0);
+  --primitive-neutral-700:  oklch(30.0% 0 0);
+  --primitive-neutral-800:  oklch(21.0% 0 0);
+  --primitive-neutral-900:  oklch(14.5% 0 0);
+  --primitive-neutral-950:  oklch(9.5% 0 0);
   --primitive-neutral-1000: oklch(0% 0 0);
 
-  /* Brand — a single hue at constant chroma, stepped only in lightness, so the
-     ramp stays perceptually even and the hover state is a real step rather than
-     a guess. */
-  --primitive-brand-300: oklch(82% 0.115 256);
-  --primitive-brand-400: oklch(72% 0.145 256);
-  --primitive-brand-500: oklch(62% 0.170 256);
-  --primitive-brand-600: oklch(52% 0.165 256);
-  --primitive-brand-700: oklch(42% 0.145 256);
+  /* Brand — amber through gold. Hue drifts from 52 (orange) at the dark end to
+     88 (gold) at the light end, which is how a real flame reads: hotter colors
+     are also lighter ones. Chroma peaks mid-ramp so the 400/500 steps carry the
+     accent and the outer steps stay usable as text. */
+  --primitive-brand-300: oklch(88% 0.105 88);
+  --primitive-brand-400: oklch(80% 0.145 75);
+  --primitive-brand-500: oklch(70% 0.170 58);
+  --primitive-brand-600: oklch(60% 0.160 52);
+  --primitive-brand-700: oklch(49% 0.135 50);
 
-  /* Status — hue-separated far enough to survive the common forms of color
-     blindness, and lightness-separated so they still differ in grayscale. */
+  /* Status — success and danger keep their conventional hues because money is
+     read green/red everywhere else. Warning is the gold end of the brand ramp
+     and info its amber end, so ambient signal (feeds, jobs, sync) stays inside
+     the accent family instead of introducing a second brand color. */
   --primitive-danger-400:  oklch(68% 0.185 27);
   --primitive-danger-500:  oklch(57% 0.205 27);
-  --primitive-success-400: oklch(74% 0.145 156);
-  --primitive-success-500: oklch(62% 0.155 156);
-  --primitive-warning-400: oklch(82% 0.145 82);
-  --primitive-warning-500: oklch(71% 0.155 82);
-  --primitive-info-400:    oklch(76% 0.115 232);
-  --primitive-info-500:    oklch(64% 0.130 232);
+  --primitive-success-400: oklch(74% 0.135 152);
+  --primitive-success-500: oklch(62% 0.145 152);
+  --primitive-warning-400: oklch(86% 0.135 92);
+  --primitive-warning-500: oklch(76% 0.145 88);
+  --primitive-info-400:    oklch(78% 0.115 70);
+  --primitive-info-500:    oklch(66% 0.125 66);
   /* <<< bootstrap:region tokens.palette */
 
   /* ── Non-color primitives — base-owned, outside the region ─────────────── */

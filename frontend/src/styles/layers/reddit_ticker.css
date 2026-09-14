@@ -1,16 +1,20 @@
 /* Reddit mention ticker motion. Interaction pauses the slow pan so controls remain usable. */
+/* Headers and the feed banner are neutral ground, not a second brand color.
+   Light keeps them warm and pale so they sit in the page; dark keeps them
+   darker than the surface they cap, with the gold reserved for the feed's own
+   text. */
 :root {
-  --research-panel-header-bg: oklch(31% 0.105 256);
-  --research-panel-header-fg: oklch(96% 0.018 256);
-  --reddit-banner-bg: oklch(24% 0.065 256);
-  --reddit-banner-fg: oklch(94% 0.02 256);
+  --research-panel-header-bg: oklch(94.2% 0.018 84);
+  --research-panel-header-fg: oklch(28% 0.025 60);
+  --reddit-banner-bg: oklch(96.2% 0.022 86);
+  --reddit-banner-fg: oklch(32% 0.038 62);
 }
 
 .dark {
-  --research-panel-header-bg: oklch(25% 0.085 256);
-  --research-panel-header-fg: oklch(92% 0.025 256);
-  --reddit-banner-bg: oklch(17% 0.05 256);
-  --reddit-banner-fg: oklch(89% 0.03 256);
+  --research-panel-header-bg: #21222c;
+  --research-panel-header-fg: #f8f8f2;
+  --reddit-banner-bg: #191a21;
+  --reddit-banner-fg: #bd93f9;
 }
 
 .research-panel-header {
@@ -24,8 +28,12 @@
 }
 
 @keyframes reddit-ticker-pan {
-  from { transform: translateX(0); }
-  to { transform: translateX(min(-18rem, -12%)); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(min(-18rem, -12%));
+  }
 }
 
 .reddit-ticker-track {

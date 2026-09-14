@@ -8,43 +8,82 @@
 @theme {
   /* Tightened tracking as size increases — optical correction, not decoration:
      large type at default tracking reads loose. */
-  --text-xs:   0.75rem;
-  --text-sm:   0.8125rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
   --text-base: 0.9375rem;
-  --text-lg:   1.0625rem;
-  --text-xl:   1.25rem;
-  --text-2xl:  1.5rem;
-  --text-3xl:  1.875rem;
-  --text-4xl:  2.375rem;
-  --text-5xl:  3.125rem;
+  --text-lg: 1.0625rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.375rem;
+  --text-5xl: 3.125rem;
 
   --tracking-tighter: -0.03em;
-  --tracking-tight:   -0.018em;
-  --tracking-normal:  0em;
-  --tracking-wide:    0.04em;
+  --tracking-tight: -0.018em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.04em;
 
-  --leading-tight:    1.15;
-  --leading-snug:     1.35;
-  --leading-normal:   1.55;
-  --leading-relaxed:  1.7;
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.7;
 
   --animate-fade-up: fade-up 0.5s var(--ease-smooth) both;
-  --animate-blink:   blink 1.1s steps(2, start) infinite;
+  --animate-blink: blink 1.1s steps(2, start) infinite;
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(0.5rem); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes sec-company-breathe {
-  0%, 100% { background-color: var(--semantic-surface); }
-  50%      { background-color: var(--semantic-primary-muted); }
+  0%,
+  100% {
+    background-color: var(--semantic-surface);
+  }
+  50% {
+    background-color: var(--semantic-primary-muted);
+  }
+}
+
+/* Side rails arrive with their data: they slide in from the edge they are
+   docked to rather than popping into the layout. */
+@keyframes rail-enter {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.rail-enter {
+  animation: rail-enter 0.22s var(--primitive-ease-smooth) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-enter {
+    animation: none;
+  }
 }
 
 .sec-company-loading {
@@ -60,14 +99,14 @@
    --ui-toggle-cut must track the button's own background, or the crescent
    stops being a crescent. */
 :root {
-  --ui-toggle-moon: oklch(38% 0.085 268);
-  --ui-toggle-sun:  oklch(78% 0.145 82);
-  --ui-toggle-cut:  var(--semantic-surface);
+  --ui-toggle-moon: oklch(38% 0.012 70);
+  --ui-toggle-sun: oklch(76% 0.155 75);
+  --ui-toggle-cut: var(--semantic-surface);
 }
 
 .dark {
-  --ui-toggle-moon: oklch(24% 0.045 268);
-  --ui-toggle-sun:  oklch(82% 0.150 82);
+  --ui-toggle-moon: #6272a4;
+  --ui-toggle-sun: #f1fa8c;
 }
 
 /* Motion animates cx, which is numeric and springs cleanly. Fill is a custom
@@ -79,7 +118,9 @@
 @layer base {
   /* Headings carry the display treatment by default so component code does not
      have to repeat it, and so it stays consistent when it is forgotten. */
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     letter-spacing: var(--tracking-tight);
     text-wrap: balance;
   }

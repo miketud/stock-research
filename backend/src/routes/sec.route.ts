@@ -378,10 +378,7 @@ interface XbrlFactValue {
 }
 
 interface CompanyFactsResponse {
-  facts: Record<
-    string,
-    Record<string, { units: Record<string, XbrlFactValue[]> }>
-  >;
+  facts: Record<string, Record<string, { units: Record<string, XbrlFactValue[]> }>>;
 }
 
 interface FinancialMetric {
@@ -492,7 +489,9 @@ async function fetchJson<T>(url: string, signal: AbortSignal): Promise<T> {
 
       if (response.ok && text.trim().startsWith('{')) return JSON.parse(text) as T;
 
-      lastReason = response.ok ? 'returned a non-JSON response' : `returned HTTP ${response.status}`;
+      lastReason = response.ok
+        ? 'returned a non-JSON response'
+        : `returned HTTP ${response.status}`;
       const retryable = response.status === 429 || response.status >= 500;
       if (!retryable || attempt === SEC_MAX_ATTEMPTS - 1) break;
       await delay(retryDelay(response, attempt), signal);
@@ -531,7 +530,9 @@ async function fetchAtomPage(start: number, signal: AbortSignal): Promise<string
       const isAtom = text.trimStart().startsWith('<?xml') && text.includes('<feed');
       if (response.ok && isAtom) return text;
 
-      lastReason = response.ok ? 'returned a non-Atom response' : `returned HTTP ${response.status}`;
+      lastReason = response.ok
+        ? 'returned a non-Atom response'
+        : `returned HTTP ${response.status}`;
       const retryable = response.status === 429 || response.status >= 500 || !isAtom;
       if (!retryable || attempt === SEC_MAX_ATTEMPTS - 1) break;
       await delay(retryDelay(response, attempt), signal);
@@ -561,7 +562,9 @@ async function fetchOwnershipXml(url: string, signal: AbortSignal): Promise<stri
       const text = await response.text();
       if (response.ok && text.includes('<ownershipDocument')) return text;
 
-      lastReason = response.ok ? 'returned a non-ownership document' : `returned HTTP ${response.status}`;
+      lastReason = response.ok
+        ? 'returned a non-ownership document'
+        : `returned HTTP ${response.status}`;
       const retryable = response.status === 429 || response.status >= 500;
       if (!retryable || attempt === SEC_MAX_ATTEMPTS - 1) break;
       await delay(retryDelay(response, attempt), signal);
@@ -591,7 +594,9 @@ async function fetchSecHtml(url: string, signal: AbortSignal): Promise<string> {
       const text = await response.text();
       if (response.ok && /<html\b/i.test(text)) return text;
 
-      lastReason = response.ok ? 'returned a non-HTML response' : `returned HTTP ${response.status}`;
+      lastReason = response.ok
+        ? 'returned a non-HTML response'
+        : `returned HTTP ${response.status}`;
       const retryable = response.status === 429 || response.status >= 500;
       if (!retryable || attempt === SEC_MAX_ATTEMPTS - 1) break;
       await delay(retryDelay(response, attempt), signal);
@@ -608,7 +613,9 @@ async function fetchSecHtml(url: string, signal: AbortSignal): Promise<string> {
 
 function decodeXml(value: string): string {
   return value
-    .replace(/&#x([0-9a-f]+);/gi, (_match, code: string) => String.fromCodePoint(Number.parseInt(code, 16)))
+    .replace(/&#x([0-9a-f]+);/gi, (_match, code: string) =>
+      String.fromCodePoint(Number.parseInt(code, 16))
+    )
     .replace(/&#(\d+);/g, (_match, code: string) => String.fromCodePoint(Number.parseInt(code, 10)))
     .replaceAll('&quot;', '"')
     .replaceAll('&apos;', "'")
@@ -706,18 +713,9 @@ function parseAtomEntries(xml: string): AtomFiling[] {
 
 let tickerDirectoryCache: { expiresAt: number; data: TickerDirectory } | undefined;
 let formsIndexCache: { expiresAt: number; data: SecFormType[] } | undefined;
-const submissionsCache = new Map<
-  string,
-  { expiresAt: number; data: CompanySubmissionsResponse }
->();
-const companyFactsCache = new Map<
-  string,
-  { expiresAt: number; data: FinancialMetric[] }
->();
-const insiderTransactionsCache = new Map<
-  string,
-  { expiresAt: number; data: InsiderCacheData }
->();
+const submissionsCache = new Map<string, { expiresAt: number; data: CompanySubmissionsResponse }>();
+const companyFactsCache = new Map<string, { expiresAt: number; data: FinancialMetric[] }>();
+const insiderTransactionsCache = new Map<string, { expiresAt: number; data: InsiderCacheData }>();
 let syncState: SecSyncState = {
   version: 2,
   status: 'idle',
@@ -726,15 +724,18 @@ let syncState: SecSyncState = {
   companies: [],
 };
 let persistQueue: Promise<void> = Promise.resolve();
+let syncAbortController: AbortController | null = null;
 
 function persistSyncState(): Promise<void> {
   const snapshot = JSON.stringify(syncState, null, 2);
-  persistQueue = persistQueue.catch(() => undefined).then(async () => {
-    await mkdir(path.dirname(syncStatePath), { recursive: true });
-    const temporaryPath = `${syncStatePath}.${process.pid}.tmp`;
-    await writeFile(temporaryPath, snapshot);
-    await rename(temporaryPath, syncStatePath);
-  });
+  persistQueue = persistQueue
+    .catch(() => undefined)
+    .then(async () => {
+      await mkdir(path.dirname(syncStatePath), { recursive: true });
+      const temporaryPath = `${syncStatePath}.${process.pid}.tmp`;
+      await writeFile(temporaryPath, snapshot);
+      await rename(temporaryPath, syncStatePath);
+    });
   return persistQueue;
 }
 
@@ -779,7 +780,9 @@ async function getSecFormTypes(signal: AbortSignal): Promise<SecFormType[]> {
     await delay(125, signal);
   }
 
-  const unique = [...new Map(forms.map((form) => [`${form.form}\u0000${form.description}`, form])).values()];
+  const unique = [
+    ...new Map(forms.map((form) => [`${form.form}\u0000${form.description}`, form])).values(),
+  ];
   unique.sort((a, b) => a.form.localeCompare(b.form, undefined, { numeric: true }));
   formsIndexCache = { expiresAt: Date.now() + FORMS_INDEX_CACHE_TTL_MS, data: unique };
   return unique;
@@ -803,10 +806,7 @@ async function getCompanySubmissions(
 async function discoverLatestCompanies(signal: AbortSignal): Promise<SyncedCompany[]> {
   const directory = await getTickerDirectory(signal);
   const publicCompanies = new Map(
-    Object.values(directory).map((entry) => [
-      String(entry.cik_str).padStart(10, '0'),
-      entry,
-    ])
+    Object.values(directory).map((entry) => [String(entry.cik_str).padStart(10, '0'), entry])
   );
   const companies = new Map<string, SyncedCompany>();
 
@@ -821,7 +821,9 @@ async function discoverLatestCompanies(signal: AbortSignal): Promise<SyncedCompa
 
       const company = companies.get(entry.cik);
       if (company) {
-        if (!company.filings.some((filing) => filing.accessionNumber === entry.filing.accessionNumber)) {
+        if (
+          !company.filings.some((filing) => filing.accessionNumber === entry.filing.accessionNumber)
+        ) {
           company.filings.push(entry.filing);
         }
       } else if (companies.size < SYNC_COMPANY_LIMIT) {
@@ -912,7 +914,11 @@ const FINANCIAL_METRICS: Array<{
     key: 'revenue',
     label: 'Revenue',
     unit: 'USD',
-    concepts: ['RevenueFromContractWithCustomerExcludingAssessedTax', 'Revenues', 'SalesRevenueNet'],
+    concepts: [
+      'RevenueFromContractWithCustomerExcludingAssessedTax',
+      'Revenues',
+      'SalesRevenueNet',
+    ],
   },
   {
     key: 'netIncome',
@@ -936,19 +942,91 @@ const FINANCIAL_METRICS: Array<{
     key: 'cash',
     label: 'Cash',
     unit: 'USD',
-    concepts: ['CashAndCashEquivalentsAtCarryingValue', 'CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents'],
+    concepts: [
+      'CashAndCashEquivalentsAtCarryingValue',
+      'CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents',
+    ],
   },
   {
     key: 'equity',
     label: 'Stockholders’ equity',
     unit: 'USD',
-    concepts: ['StockholdersEquity', 'StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest'],
+    concepts: [
+      'StockholdersEquity',
+      'StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest',
+    ],
   },
   {
     key: 'sharesOutstanding',
     label: 'Shares outstanding',
     unit: 'shares',
     concepts: ['EntityCommonStockSharesOutstanding'],
+  },
+  /* Everything below arrives in the same companyfacts payload the metrics
+     above are read from, so it costs no additional request. It exists to make
+     the price-free ratios computable: liquidity, leverage, margin and return. */
+  {
+    key: 'liabilities',
+    label: 'Liabilities',
+    unit: 'USD',
+    concepts: ['Liabilities'],
+  },
+  {
+    key: 'currentAssets',
+    label: 'Current assets',
+    unit: 'USD',
+    concepts: ['AssetsCurrent'],
+  },
+  {
+    key: 'currentLiabilities',
+    label: 'Current liabilities',
+    unit: 'USD',
+    concepts: ['LiabilitiesCurrent'],
+  },
+  {
+    key: 'longTermDebt',
+    label: 'Long-term debt',
+    unit: 'USD',
+    concepts: ['LongTermDebtNoncurrent', 'LongTermDebt'],
+  },
+  {
+    key: 'grossProfit',
+    label: 'Gross profit',
+    unit: 'USD',
+    concepts: ['GrossProfit'],
+  },
+  {
+    key: 'operatingIncome',
+    label: 'Operating income',
+    unit: 'USD',
+    concepts: ['OperatingIncomeLoss'],
+  },
+  {
+    key: 'operatingCashFlow',
+    label: 'Operating cash flow',
+    unit: 'USD',
+    concepts: [
+      'NetCashProvidedByUsedInOperatingActivities',
+      'NetCashProvidedByUsedInOperatingActivitiesContinuingOperations',
+    ],
+  },
+  {
+    key: 'capex',
+    label: 'Capital expenditure',
+    unit: 'USD',
+    concepts: ['PaymentsToAcquirePropertyPlantAndEquipment', 'PaymentsToAcquireProductiveAssets'],
+  },
+  {
+    key: 'researchDevelopment',
+    label: 'R&D expense',
+    unit: 'USD',
+    concepts: ['ResearchAndDevelopmentExpense'],
+  },
+  {
+    key: 'dividendPerShare',
+    label: 'Dividend / share',
+    unit: 'USD/shares',
+    concepts: ['CommonStockDividendsPerShareDeclared', 'CommonStockDividendsPerShareCashPaid'],
   },
 ];
 
@@ -1005,22 +1083,25 @@ async function getCompanyFilings(
   limit: number,
   signal: AbortSignal,
   includeCompanyFacts = false
-): Promise<{
-  company_id: string;
-  cik: string;
-  entityName: string;
-  companyInfo: Omit<CompanySubmissionsResponse, 'cik' | 'name' | 'filings'>;
-  financialSnapshot: FinancialMetric[];
-  insiderActivity: {
-    periodDays: number;
-    total: number;
-    form3: number;
-    form4: number;
-    form5: number;
-    latestDate?: string;
-  };
-  filings: FilingResult[];
-} | undefined> {
+): Promise<
+  | {
+      company_id: string;
+      cik: string;
+      entityName: string;
+      companyInfo: Omit<CompanySubmissionsResponse, 'cik' | 'name' | 'filings'>;
+      financialSnapshot: FinancialMetric[];
+      insiderActivity: {
+        periodDays: number;
+        total: number;
+        form3: number;
+        form4: number;
+        form5: number;
+        latestDate?: string;
+      };
+      filings: FilingResult[];
+    }
+  | undefined
+> {
   const directory = await getTickerDirectory(signal);
   const company = Object.values(directory).find((entry) => entry.ticker.toUpperCase() === ticker);
   if (!company) return undefined;
@@ -1163,7 +1244,10 @@ function parseOwnershipTransactions(xml: string, filing: FilingResult): InsiderT
 
   const transactions: InsiderTransaction[] = [];
   const tables: Array<{ pattern: RegExp; derivative: boolean }> = [
-    { pattern: /<nonDerivativeTransaction>([\s\S]*?)<\/nonDerivativeTransaction>/gi, derivative: false },
+    {
+      pattern: /<nonDerivativeTransaction>([\s\S]*?)<\/nonDerivativeTransaction>/gi,
+      derivative: false,
+    },
     { pattern: /<derivativeTransaction>([\s\S]*?)<\/derivativeTransaction>/gi, derivative: true },
   ];
 
@@ -1179,7 +1263,10 @@ function parseOwnershipTransactions(xml: string, filing: FilingResult): InsiderT
         ownerCik,
         relationships,
         securityTitle: xmlValue(transaction, 'securityTitle'),
-        transactionCode: xmlText(xmlElement(transaction, 'transactionCoding') ?? '', 'transactionCode'),
+        transactionCode: xmlText(
+          xmlElement(transaction, 'transactionCoding') ?? '',
+          'transactionCode'
+        ),
         acquiredDisposed: xmlValue(transaction, 'transactionAcquiredDisposedCode'),
         shares: xmlNumber(transaction, 'transactionShares'),
         pricePerShare: xmlNumber(transaction, 'transactionPricePerShare'),
@@ -1196,9 +1283,7 @@ function parseOwnershipTransactions(xml: string, filing: FilingResult): InsiderT
 
 function ownershipXmlUrl(filingUrl: string): string {
   const url = new URL(filingUrl);
-  const match = url.pathname.match(
-    /^(\/Archives\/edgar\/data\/\d+\/\d+\/)(?:[^/]+\/)*([^/]+)$/i
-  );
+  const match = url.pathname.match(/^(\/Archives\/edgar\/data\/\d+\/\d+\/)(?:[^/]+\/)*([^/]+)$/i);
   if (!match) return filingUrl;
   return `${url.origin}${match[1]}${match[2]}`;
 }
@@ -1207,15 +1292,18 @@ async function getInsiderTransactions(
   ticker: string,
   limit: number,
   signal: AbortSignal
-): Promise<{
-  ticker: string;
-  cik: string;
-  periodDays: number;
-  filingsScanned: number;
-  scannedAccessions: string[];
-  filings: Array<FilingResult & { ownerNames: string[] }>;
-  transactions: InsiderTransaction[];
-} | undefined> {
+): Promise<
+  | {
+      ticker: string;
+      cik: string;
+      periodDays: number;
+      filingsScanned: number;
+      scannedAccessions: string[];
+      filings: Array<FilingResult & { ownerNames: string[] }>;
+      transactions: InsiderTransaction[];
+    }
+  | undefined
+> {
   const directory = await getTickerDirectory(signal);
   const company = Object.values(directory).find((entry) => entry.ticker.toUpperCase() === ticker);
   if (!company) return undefined;
@@ -1306,56 +1394,88 @@ async function runSecSync(): Promise<void> {
   await persistSyncState();
 
   const controller = new AbortController();
-  const targets = await discoverLatestCompanies(controller.signal);
-  if (targets.length === 0) {
-    throw new SecUpstreamError('SEC Latest Filings did not contain any listed companies.');
-  }
-  syncState.total = targets.length;
-  syncState.companies = targets;
-  await persistSyncState();
+  syncAbortController = controller;
 
-  let failures = 0;
-
-  for (const target of targets) {
-    moveCompanyToFront(target.cik, { status: 'loading', error: undefined });
+  try {
+    const targets = await discoverLatestCompanies(controller.signal);
+    if (targets.length === 0) {
+      throw new SecUpstreamError('SEC Latest Filings did not contain any listed companies.');
+    }
+    syncState.total = targets.length;
+    syncState.companies = targets;
     await persistSyncState();
 
-    try {
-      const company = await getCompanyFilings(
-        target.ticker,
-        undefined,
-        SYNC_FILING_LIMIT,
-        controller.signal
-      );
-      if (!company) throw new Error(`No SEC company found for ticker ${target.ticker}.`);
-      moveCompanyToFront(target.cik, {
-        entityName: company.entityName,
-        status: 'success',
-        filings: company.filings,
-        updatedAt: new Date().toISOString(),
-      });
-    } catch (error) {
-      failures++;
-      moveCompanyToFront(target.cik, {
-        status: 'error',
-        error: error instanceof Error ? error.message : 'SEC lookup failed.',
-        updatedAt: new Date().toISOString(),
-      });
+    let failures = 0;
+
+    for (const target of targets) {
+      if (controller.signal.aborted) break;
+      moveCompanyToFront(target.cik, { status: 'loading', error: undefined });
+      await persistSyncState();
+
+      try {
+        const company = await getCompanyFilings(
+          target.ticker,
+          undefined,
+          SYNC_FILING_LIMIT,
+          controller.signal
+        );
+        if (!company) throw new Error(`No SEC company found for ticker ${target.ticker}.`);
+        moveCompanyToFront(target.cik, {
+          entityName: company.entityName,
+          status: 'success',
+          filings: company.filings,
+          updatedAt: new Date().toISOString(),
+        });
+      } catch (error) {
+        if (controller.signal.aborted) {
+          moveCompanyToFront(target.cik, { status: 'queued', error: undefined });
+          break;
+        }
+        failures++;
+        moveCompanyToFront(target.cik, {
+          status: 'error',
+          error: error instanceof Error ? error.message : 'SEC lookup failed.',
+          updatedAt: new Date().toISOString(),
+        });
+      }
+
+      syncState.processed++;
+      await persistSyncState();
+      if (syncState.processed < syncState.total) {
+        try {
+          await delay(125, controller.signal);
+        } catch {
+          break;
+        }
+      }
     }
 
-    syncState.processed++;
+    const feedOrder = new Map(targets.map((company, index) => [company.cik, index]));
+    syncState.companies.sort(
+      (a, b) =>
+        (feedOrder.get(a.cik) ?? Number.MAX_SAFE_INTEGER) -
+        (feedOrder.get(b.cik) ?? Number.MAX_SAFE_INTEGER)
+    );
+    if (controller.signal.aborted) {
+      syncState.status = 'idle';
+      syncState.completedAt = new Date().toISOString();
+      syncState.error = `Stopped after ${syncState.processed} of ${targets.length} companies.`;
+    } else {
+      syncState.status = failures === 0 ? 'success' : 'error';
+      syncState.completedAt = new Date().toISOString();
+      syncState.error =
+        failures > 0 ? `${failures} of ${targets.length} companies failed to refresh.` : undefined;
+    }
     await persistSyncState();
-    if (syncState.processed < syncState.total) await delay(125, controller.signal);
+  } catch (error) {
+    if (!controller.signal.aborted) throw error;
+    syncState.status = 'idle';
+    syncState.completedAt = new Date().toISOString();
+    syncState.error = 'Stopped before the SEC feed finished loading.';
+    await persistSyncState();
+  } finally {
+    if (syncAbortController === controller) syncAbortController = null;
   }
-
-  const feedOrder = new Map(targets.map((company, index) => [company.cik, index]));
-  syncState.companies.sort(
-    (a, b) => (feedOrder.get(a.cik) ?? Number.MAX_SAFE_INTEGER) - (feedOrder.get(b.cik) ?? Number.MAX_SAFE_INTEGER)
-  );
-  syncState.status = failures === 0 ? 'success' : 'error';
-  syncState.completedAt = new Date().toISOString();
-  syncState.error = failures > 0 ? `${failures} of ${targets.length} companies failed to refresh.` : undefined;
-  await persistSyncState();
 }
 
 async function getArchivesIndex(
@@ -1421,7 +1541,8 @@ const route: FastifyPluginAsync = async (app) => {
         request.log.warn({ reason: error.message }, 'SEC EDGAR lookup unavailable');
         return reply.code(error.statusCode).send({ message: error.message });
       }
-      if (!data) return reply.code(404).send({ message: `No SEC company found for ticker ${ticker}.` });
+      if (!data)
+        return reply.code(404).send({ message: `No SEC company found for ticker ${ticker}.` });
 
       return data;
     }
@@ -1444,6 +1565,15 @@ const route: FastifyPluginAsync = async (app) => {
       });
     }
 
+    return reply.code(202).send(syncState);
+  });
+
+  app.post('/sync/stop', async (_request, reply) => {
+    if (syncState.status !== 'running' || !syncAbortController) {
+      return reply.code(409).send({ message: 'No SEC sync is running.' });
+    }
+
+    syncAbortController.abort(new Error('SEC sync stopped by request.'));
     return reply.code(202).send(syncState);
   });
 

@@ -46,6 +46,10 @@
   --color-primary-hover:  var(--semantic-primary-hover);
   --color-primary-active: var(--semantic-primary-active);
   --color-primary-muted:  var(--semantic-primary-muted);
+  /* Components were written against `text-primary-contrast`, which never
+     existed as a token — alias it to the on-primary role rather than rewriting
+     six call sites. Load-bearing now that primary is a light amber. */
+  --color-primary-contrast: var(--semantic-on-primary);
 
   --color-success: var(--semantic-success);
   --color-warning: var(--semantic-warning);
@@ -90,6 +94,8 @@
   --font-mono: var(--semantic-font-mono);
 
   /* ── Elevation ───────────────────────────────────────────────────────── */
+  --shadow-hard:    var(--semantic-shadow-hard);
+  --shadow-hard-lg: var(--semantic-shadow-hard-lg);
   --shadow-sm: var(--semantic-shadow-sm);
   --shadow-md: var(--semantic-shadow-md);
   --shadow-lg: var(--semantic-shadow-lg);
