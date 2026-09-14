@@ -18,36 +18,36 @@
 
 :root {
   /* ── Surfaces ─────────────────────────────────────────────────────────── */
-  --semantic-bg:             var(--primitive-neutral-50);
-  --semantic-bg-alt:         var(--primitive-neutral-100);
-  --semantic-surface:        var(--primitive-neutral-0);
-  --semantic-surface-alt:    var(--primitive-neutral-100);
+  --semantic-bg: var(--primitive-neutral-50);
+  --semantic-bg-alt: var(--primitive-neutral-100);
+  --semantic-surface: var(--primitive-neutral-0);
+  --semantic-surface-alt: var(--primitive-neutral-100);
   --semantic-surface-raised: var(--primitive-neutral-0);
 
   /* ── Text ─────────────────────────────────────────────────────────────── */
-  --semantic-text:        var(--primitive-neutral-950);
-  --semantic-text-muted:  var(--primitive-neutral-600);
+  --semantic-text: var(--primitive-neutral-950);
+  --semantic-text-muted: var(--primitive-neutral-600);
   --semantic-text-subtle: var(--primitive-neutral-400);
-  --semantic-on-primary:  var(--primitive-neutral-0);
+  --semantic-on-primary: var(--primitive-neutral-0);
 
   /* ── Borders ──────────────────────────────────────────────────────────── */
-  --semantic-border:        var(--primitive-neutral-200);
-  --semantic-border-strong: var(--primitive-neutral-300);
+  --semantic-border: var(--primitive-neutral-200);
+  --semantic-border-strong: var(--primitive-neutral-950);
   --semantic-border-subtle: var(--primitive-neutral-100);
 
   /* ── Brand ────────────────────────────────────────────────────────────── */
-  --semantic-primary:        var(--primitive-brand-500);
-  --semantic-primary-hover:  var(--primitive-brand-600);
+  --semantic-primary: var(--primitive-brand-500);
+  --semantic-primary-hover: var(--primitive-brand-600);
   --semantic-primary-active: var(--primitive-brand-700);
-  --semantic-primary-muted:  oklch(55% 0.20 250 / 0.12);
+  --semantic-primary-muted: oklch(55% 0.2 250 / 0.12);
 
   /* ── Status ───────────────────────────────────────────────────────────── */
   /* In the contract because the agent injection hardcodes text-red-400 /
      bg-green-400 / text-white, none of which can respond to a theme. */
   --semantic-success: var(--primitive-success-500);
   --semantic-warning: var(--primitive-warning-500);
-  --semantic-danger:  var(--primitive-danger-500);
-  --semantic-info:    var(--primitive-info-500);
+  --semantic-danger: var(--primitive-danger-500);
+  --semantic-info: var(--primitive-info-500);
 
   /* ── Scrims ───────────────────────────────────────────────────────────── */
   --semantic-overlay: oklch(0% 0 0 / 0.55);
@@ -72,39 +72,39 @@
   /* ── Elevation ────────────────────────────────────────────────────────── */
   --semantic-shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.06);
   --semantic-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.08), 0 1px 3px oklch(0% 0 0 / 0.06);
-  --semantic-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.10), 0 4px 6px oklch(0% 0 0 / 0.06);
+  --semantic-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.1), 0 4px 6px oklch(0% 0 0 / 0.06);
 }
 
 /* ── Dark — the default, server-rendered on <html class="dark"> ─────────── */
 .dark {
-  --semantic-bg:             var(--primitive-neutral-950);
-  --semantic-bg-alt:         var(--primitive-neutral-900);
-  --semantic-surface:        var(--primitive-neutral-900);
-  --semantic-surface-alt:    var(--primitive-neutral-800);
+  --semantic-bg: var(--primitive-neutral-950);
+  --semantic-bg-alt: var(--primitive-neutral-900);
+  --semantic-surface: var(--primitive-neutral-900);
+  --semantic-surface-alt: var(--primitive-neutral-800);
   --semantic-surface-raised: var(--primitive-neutral-700);
 
-  --semantic-text:        var(--primitive-neutral-50);
-  --semantic-text-muted:  var(--primitive-neutral-400);
+  --semantic-text: var(--primitive-neutral-50);
+  --semantic-text-muted: var(--primitive-neutral-400);
   --semantic-text-subtle: var(--primitive-neutral-500);
-  --semantic-on-primary:  var(--primitive-neutral-0);
+  --semantic-on-primary: var(--primitive-neutral-0);
 
-  --semantic-border:        var(--primitive-neutral-800);
+  --semantic-border: var(--primitive-neutral-800);
   --semantic-border-strong: var(--primitive-neutral-600);
   --semantic-border-subtle: var(--primitive-neutral-900);
 
-  --semantic-primary:        var(--primitive-brand-400);
-  --semantic-primary-hover:  var(--primitive-brand-300);
+  --semantic-primary: var(--primitive-brand-400);
+  --semantic-primary-hover: var(--primitive-brand-300);
   --semantic-primary-active: var(--primitive-brand-500);
-  --semantic-primary-muted:  oklch(66% 0.18 250 / 0.16);
+  --semantic-primary-muted: oklch(66% 0.18 250 / 0.16);
 
   --semantic-success: var(--primitive-success-400);
   --semantic-warning: var(--primitive-warning-400);
-  --semantic-danger:  var(--primitive-danger-400);
-  --semantic-info:    var(--primitive-info-400);
+  --semantic-danger: var(--primitive-danger-400);
+  --semantic-info: var(--primitive-info-400);
 
   --semantic-overlay: oklch(0% 0 0 / 0.72);
 
-  --semantic-shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.30);
-  --semantic-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.40), 0 1px 3px oklch(0% 0 0 / 0.30);
-  --semantic-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.50), 0 4px 6px oklch(0% 0 0 / 0.35);
+  --semantic-shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.3);
+  --semantic-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.4), 0 1px 3px oklch(0% 0 0 / 0.3);
+  --semantic-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.5), 0 4px 6px oklch(0% 0 0 / 0.35);
 }

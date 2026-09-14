@@ -222,6 +222,18 @@
     "backend/src/routes/sec.route.ts": {
       "class": "injection",
       "owner": "ui_ux"
+    },
+    "backend/src/routes/reddit.route.ts": {
+      "class": "injection",
+      "owner": "reddit_trends"
+    },
+    "frontend/src/components/RedditMentionTicker.tsx": {
+      "class": "injection",
+      "owner": "reddit_trends"
+    },
+    "frontend/src/styles/layers/reddit_ticker.css": {
+      "class": "injection",
+      "owner": "reddit_trends"
     }
   },
   "regions": {
@@ -238,6 +250,10 @@
     "ui_ux": {
       "version": "1.0.0",
       "appliedAt": "2026-09-11T09:11:25.110Z"
+    },
+    "reddit_trends": {
+      "version": "1.0.0",
+      "appliedAt": "2026-09-14T17:03:55.254Z"
     }
   },
   "packages": {}

@@ -42,6 +42,15 @@
   50%      { opacity: 0; }
 }
 
+@keyframes sec-company-breathe {
+  0%, 100% { background-color: var(--semantic-surface); }
+  50%      { background-color: var(--semantic-primary-muted); }
+}
+
+.sec-company-loading {
+  animation: sec-company-breathe 1.8s var(--primitive-ease-smooth) infinite;
+}
+
 /* ── Theme toggle ──────────────────────────────────────────────────────────
    Decorative colors, so they are component tokens rather than semantic roles:
    nothing else in the system needs a "sun". They live here rather than in

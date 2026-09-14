@@ -25,6 +25,9 @@ dist/
 build/
 *.tsbuildinfo
 
+# Runtime state
+backend/var/
+
 # Testing
 coverage/
 

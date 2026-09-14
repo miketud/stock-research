@@ -1,0 +1,44 @@
+/* Reddit mention ticker motion. Interaction pauses the slow pan so controls remain usable. */
+:root {
+  --research-panel-header-bg: oklch(31% 0.105 256);
+  --research-panel-header-fg: oklch(96% 0.018 256);
+  --reddit-banner-bg: oklch(24% 0.065 256);
+  --reddit-banner-fg: oklch(94% 0.02 256);
+}
+
+.dark {
+  --research-panel-header-bg: oklch(25% 0.085 256);
+  --research-panel-header-fg: oklch(92% 0.025 256);
+  --reddit-banner-bg: oklch(17% 0.05 256);
+  --reddit-banner-fg: oklch(89% 0.03 256);
+}
+
+.research-panel-header {
+  background-color: var(--research-panel-header-bg);
+  color: var(--research-panel-header-fg);
+}
+
+.reddit-banner {
+  background-color: var(--reddit-banner-bg);
+  color: var(--reddit-banner-fg);
+}
+
+@keyframes reddit-ticker-pan {
+  from { transform: translateX(0); }
+  to { transform: translateX(min(-18rem, -12%)); }
+}
+
+.reddit-ticker-track {
+  animation: reddit-ticker-pan 24s ease-in-out infinite alternate;
+}
+
+.reddit-ticker-track:hover,
+.reddit-ticker-track:focus-within {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reddit-ticker-track {
+    animation: none;
+  }
+}
