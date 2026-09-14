@@ -1,12 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { ExtensionPoint } from '@/components/ExtensionPoint';
 import { RedditMentionTicker } from '@/components/RedditMentionTicker';
 import headerActions from '@/extensions/header-actions/index.generated';
 
 export function NavBar() {
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b-4 border-border-strong bg-surface">
       <div className="flex min-h-16 w-full items-center gap-4 px-6">
@@ -36,7 +39,7 @@ export function NavBar() {
           />
         </div>
       </div>
-      <RedditMentionTicker />
+      {pathname !== '/simulation' && <RedditMentionTicker />}
     </header>
   );
 }

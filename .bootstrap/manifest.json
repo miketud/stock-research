@@ -234,6 +234,10 @@
     "frontend/src/styles/layers/reddit_ticker.css": {
       "class": "injection",
       "owner": "reddit_trends"
+    },
+    "frontend/src/app/simulation/page.tsx": {
+      "class": "injection",
+      "owner": "reddit_trends"
     }
   },
   "regions": {
