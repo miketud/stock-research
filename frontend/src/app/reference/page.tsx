@@ -97,7 +97,7 @@ export default function ReferencePage() {
   return (
     <main className="mx-auto w-full max-w-7xl px-6 py-12">
       <FadeIn>
-        <div className="mb-8 border-4 border-border-strong bg-surface p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div className="mb-8 border-4 border-border-strong bg-surface p-6 shadow-hard-lg">
           <h1 className="mb-2 text-4xl font-black uppercase tracking-tight text-text">
             SEC Form Reference
           </h1>
@@ -108,7 +108,7 @@ export default function ReferencePage() {
       </FadeIn>
 
       <FadeIn delay={0.1}>
-        <section className="overflow-hidden border-4 border-border-strong bg-surface shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <section className="overflow-hidden border-4 border-border-strong bg-surface shadow-hard-lg">
           <div className="grid gap-3 border-b-4 border-border-strong bg-surface-alt p-4 md:grid-cols-[minmax(16rem,1fr)_minmax(13rem,20rem)_auto] md:items-center">
             <label className="min-w-0">
               <span className="sr-only">Search SEC form types</span>
@@ -215,7 +215,7 @@ export default function ReferencePage() {
                               href={form.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-block border-2 border-border-strong bg-surface px-3 py-1 text-xs font-black text-text shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-surface-raised hover:shadow-none"
+                              className="inline-block border-2 border-border-strong bg-surface px-3 py-1 text-xs font-black text-text shadow-hard transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-surface-raised hover:shadow-none"
                             >
                               VIEW
                             </a>

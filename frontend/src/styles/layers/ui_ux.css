@@ -99,8 +99,8 @@
    --ui-toggle-cut must track the button's own background, or the crescent
    stops being a crescent. */
 :root {
-  --ui-toggle-moon: oklch(38% 0.012 70);
-  --ui-toggle-sun: oklch(76% 0.155 75);
+  --ui-toggle-moon: oklch(36% 0.032 58);
+  --ui-toggle-sun: oklch(72% 0.160 68);
   --ui-toggle-cut: var(--semantic-surface);
 }
 

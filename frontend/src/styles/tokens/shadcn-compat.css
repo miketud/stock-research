@@ -33,12 +33,15 @@
   /* shadcn derives its own radii from --radius. Sharp corners, everywhere. */
   --radius: 0rem;
 
-  /* Chart colors — declared so `shadcn add chart` resolves. */
-  --semantic-chart-1: var(--primitive-brand-500);
-  --semantic-chart-2: var(--primitive-info-500);
-  --semantic-chart-3: var(--primitive-success-500);
-  --semantic-chart-4: var(--primitive-warning-500);
-  --semantic-chart-5: var(--primitive-danger-500);
+  /* Chart colors — declared so `shadcn add chart` resolves. Pointed at the
+     semantic roles rather than the *-500 primitives: light deepens its status
+     colors for legibility on paper, and charts have to inherit that rather than
+     reach past it to the raw ramp. Dark overrides below with its own -400 set. */
+  --semantic-chart-1: var(--semantic-primary);
+  --semantic-chart-2: var(--semantic-info);
+  --semantic-chart-3: var(--semantic-success);
+  --semantic-chart-4: var(--semantic-warning);
+  --semantic-chart-5: var(--semantic-danger);
 }
 
 .dark {

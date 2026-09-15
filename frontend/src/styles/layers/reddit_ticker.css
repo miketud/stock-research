@@ -4,10 +4,11 @@
    darker than the surface they cap, with the gold reserved for the feed's own
    text. */
 :root {
-  --research-panel-header-bg: oklch(94.2% 0.018 84);
-  --research-panel-header-fg: oklch(28% 0.025 60);
-  --reddit-banner-bg: oklch(96.2% 0.022 86);
-  --reddit-banner-fg: oklch(32% 0.038 62);
+  --research-panel-header-bg: oklch(93.2% 0.026 82);
+  --research-panel-header-fg: oklch(31% 0.030 60);
+  --reddit-banner-bg: oklch(94.6% 0.030 86);
+  /* Brand-flavored, the way .dark below leans on Dracula purple. */
+  --reddit-banner-fg: oklch(44% 0.110 52);
 }
 
 .dark {

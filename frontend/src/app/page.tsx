@@ -11,6 +11,11 @@ import {
 } from '@/components/InsiderFormsTable';
 import { FadeIn } from '@/components/motion/FadeIn';
 import { ResearchMetricsRail, type FinancialMetric } from '@/components/ResearchMetricsRail';
+import {
+  matchTickers,
+  type TickerDirectoryCache,
+  type TickerDirectoryItem,
+} from '@/lib/ticker-directory';
 
 interface CompanyInfo {
   entityType?: string;
@@ -40,17 +45,6 @@ interface SECResponse {
   financialSnapshot?: FinancialMetric[];
   insiderActivity?: InsiderActivity;
   filings: Filing[];
-}
-
-interface TickerDirectoryItem {
-  ticker: string;
-  name: string;
-}
-
-interface TickerDirectoryCache {
-  version: number;
-  fetchedAt: string;
-  tickers: TickerDirectoryItem[];
 }
 
 type SyncStatus = 'idle' | 'running' | 'success' | 'error';
@@ -273,29 +267,10 @@ export default function Home() {
     };
   }, []);
 
-  const tickerSuggestions = useMemo(() => {
-    const query = ticker.trim().toUpperCase();
-    if (!query) return [];
-    const scored = tickerDirectory
-      .map((entry) => {
-        const symbol = entry.ticker.toUpperCase();
-        const name = entry.name.toUpperCase();
-        const score =
-          symbol === query
-            ? 0
-            : symbol.startsWith(query)
-              ? 1
-              : name.startsWith(query)
-                ? 2
-                : name.includes(query)
-                  ? 3
-                  : 4;
-        return { entry, score };
-      })
-      .filter(({ score }) => score < 4)
-      .sort((a, b) => a.score - b.score || a.entry.ticker.localeCompare(b.entry.ticker));
-    return scored.slice(0, 8).map(({ entry }) => entry);
-  }, [ticker, tickerDirectory]);
+  const tickerSuggestions = useMemo(
+    () => matchTickers(tickerDirectory, ticker),
+    [ticker, tickerDirectory]
+  );
 
   useEffect(() => {
     let active = true;
@@ -534,6 +509,7 @@ export default function Home() {
         watchlist={watchlist}
         activeTicker={activeTicker}
         loading={loading}
+        tickerDirectory={tickerDirectory}
         onSelectTicker={(t) => void loadFilings(t)}
         onToggleWatchlist={toggleWatchlist}
       />
