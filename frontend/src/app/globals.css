@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   class:base — the CSS entry point, and a singleton.
+   The CSS entry point, and a singleton.
 
    It contains imports and @layer base ONLY. Every previous script in this repo
    fought over this file: shadcn init wrote tokens into it, the theme injection

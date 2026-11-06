@@ -1,4 +1,4 @@
-// class:base — CORS is a base concern, not an injection's.
+// CORS is a whole-app concern (registered once), not a per-route one.
 //
 // Under the singleton rule, anything that must live in backend/src/app.ts
 // belongs to the base. The agent injection needed CORS and so patched app.ts by

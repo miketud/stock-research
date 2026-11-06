@@ -1,11 +1,11 @@
-// class:base — the shared shape of an extension-point entry.
+// The shared shape of an extension-point entry.
 //
 // Hand-written on purpose. Both directions import from here: the generated
 // barrel under extensions/<name>/ declares its array as ExtensionEntry[], and
 // ExtensionPoint.tsx consumes it. Declaring the type in a barrel instead would
 // make the generic component depend on one concrete extension point — and
-// ExtensionPoint.tsx is class:base, so removing that directory would stop the
-// BASE from typechecking.
+// ExtensionPoint.tsx is a fixed component, so removing that directory would
+// stop the app from typechecking.
 
 import type { ComponentType } from 'react';
 

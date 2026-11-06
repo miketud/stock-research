@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   class:base — shadcn/Base UI reconciliation.
+   shadcn/Base UI reconciliation.
 
    `shadcn init` writes its own token set into globals.css. The old
    Tailwind-injection.sh then overwrote globals.css wholesale, which is why any

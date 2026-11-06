@@ -1,4 +1,4 @@
-// class:base — the only sanctioned way to add UI to a base-owned layout file.
+// The only sanctioned way to add UI to a shared layout file.
 //
 // Region markers are forbidden inside JSX: a marker in attribute position is a
 // syntax error, and injected content has to be valid in the exact position it

@@ -10,6 +10,7 @@ import {
   type InsiderTransactionsResponse,
 } from '@/components/InsiderFormsTable';
 import { FadeIn } from '@/components/motion/FadeIn';
+
 import { ResearchMetricsRail, type FinancialMetric } from '@/components/ResearchMetricsRail';
 import {
   matchTickers,
@@ -571,7 +572,7 @@ export default function Home() {
                       />
                       <button
                         type="submit"
-                        disabled={loading || ticker.trim().length === 0}
+                        disabled={!!(loading || ticker.trim().length === 0)}
                         aria-label={loading ? 'Searching filings' : 'Search filings'}
                         title={loading ? 'Searching filings' : 'Search filings'}
                         className="grid h-full w-9 place-items-center border-l border-border text-primary transition-colors hover:bg-surface-alt disabled:cursor-not-allowed disabled:text-text-subtle"
@@ -907,7 +908,9 @@ export default function Home() {
                 </div>
               </div>
 
-              <FormsTableMain key={`forms-${activeTicker}`} filings={data.filings} />
+                <div className="flex flex-col gap-4">
+                  <FormsTableMain key={`forms-${activeTicker}`} filings={data.filings} />
+                </div>
 
               <InsiderFormsTable
                 key={`insiders-${activeTicker}`}

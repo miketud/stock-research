@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "gen:barrels": "node ../.bootstrap/bin/gen_barrels.mjs --root .. --quiet",
+    "gen:barrels": "node scripts/gen-barrels.mjs --root .. --quiet",
     "predev": "pnpm gen:barrels",
     "prebuild": "pnpm gen:barrels",
     "typecheck": "tsc --noEmit"

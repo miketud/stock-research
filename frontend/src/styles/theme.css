@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   class:base — THE BUILD LAYER. This file is the reason the rebuild is worth it.
+   THE BUILD LAYER. This file is the reason the rebuild is worth it.
 
    Tailwind v4 generates utilities ONLY from @theme keys.
      • Colors on a plain :root  → no `bg-surface` utility exists at all.

@@ -1,4 +1,4 @@
-// class:base — process entrypoint. app.ts stays transport-agnostic so it can be
+// Process entrypoint. app.ts stays transport-agnostic so it can be
 // imported directly by tests without binding a port.
 
 import { execFileSync } from 'node:child_process';

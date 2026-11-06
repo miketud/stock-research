@@ -1,4 +1,4 @@
-// class:base — fail-fast environment validation.
+// Fail-fast environment validation.
 //
 // Parsed once, at import time, so a missing or malformed variable is a startup
 // error with a named field rather than `undefined` surfacing three layers deep.

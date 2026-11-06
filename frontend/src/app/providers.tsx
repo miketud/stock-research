@@ -1,6 +1,6 @@
 'use client';
 
-// class:base — folds the generated provider barrel.
+// Folds the generated provider barrel.
 //
 // Adding a React context means dropping providers/NN-name.tsx into the
 // directory. The NN prefix is the nesting order (lowest is outermost) and the

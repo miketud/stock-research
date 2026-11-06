@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// class:base — FROZEN after this point, and hash-enforced.
+// FROZEN after this point.
 //
 // layout.tsx is the archetypal singleton: Next permits exactly one, and every
 // injection that wants to wrap the tree, add a header item, or load a font would
@@ -15,6 +15,7 @@
 // the class. suppressHydrationWarning is required and sufficient: the script
 // mutates <html> before React hydrates, and that one element is expected to
 // differ.
+//
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { Metadata } from 'next';

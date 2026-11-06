@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// class:base — FROZEN. Do not add imports or route registrations here.
+// FROZEN. Do not add imports or route registrations here.
 //
 // This file registers nothing by name. Adding a route means dropping a file in
 // src/routes/; adding CORS, auth or rate limiting means dropping a file in

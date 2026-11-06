@@ -82,7 +82,7 @@ const perShareUsd = (value: number) =>
 /* Every ratio here is computed from facts already in the snapshot — no quote
    feed, no extra request. Each takes the facts it names and returns undefined
    when any of them is missing or would divide by zero. */
-const derivedMetrics: Array<{
+export const derivedMetrics: Array<{
   key: string;
   label: string;
   note: string;

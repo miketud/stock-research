@@ -1,0 +1,1 @@
+disabled={!!(loading || ticker.trim().length === 0)}

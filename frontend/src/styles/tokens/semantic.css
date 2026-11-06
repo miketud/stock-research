@@ -1,27 +1,22 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   TIER 2 — SEMANTIC.  class:base — THIS IS THE CONTRACT.
-   Base owns WHICH roles exist; an injection owns what color they are.
-   The role names here are mirrored in the manifest as
-   capabilities.tokens.contract.roles, so an injection can assert a role exists
-   BEFORE writing className="bg-surface-alt".
-
-   Naming: --semantic-* is the RUNTIME layer. It is deliberately NOT --color-*,
-   which is Tailwind's @theme namespace — a color declared as --color-x on a
-   plain :root looks like a token and generates nothing, which is exactly the
-   bug in Apr28_Frontend.sh. theme.css maps these into --color-* via
-   `@theme inline`.
-
-   Light lives on :root; dark overrides under .dark. layout.tsx server-renders
-   <html class="dark">, so dark is the default even with JavaScript disabled,
-   and the inline script removes the class when the stored theme is light.
-   ───────────────────────────────────────────────────────────────────────────── */
+   TIER 2 — SEMANTIC. THIS IS THE CONTRACT.
+   This file defines WHICH semantic roles exist; the layer files decide their colors.
+   Keep the names stable so a component can rely on a role existing BEFORE
+   writing className="bg-surface-alt".
+//
+// Naming: --semantic-* is the RUNTIME layer. It is deliberately NOT --color-*
+// which is Tailwind's @theme namespace — a color declared as --color-x on a
+// plain :root looks like a token and generates nothing, which is exactly the
+// bug in Apr28_Frontend.sh. theme.css maps these into --color-* via
+// `@theme inline`.
+───────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  /* Light is "solar forward", built on Solarized Light's structural logic: a
+  /* Light is \"solar forward\", built on Solarized Light's structural logic: a
      capped brightness ceiling and a tight ramp rather than picked colors. The
      page is warm paper at hue 82-88, lit from the same amber the brand uses, so
      the accent belongs to the page instead of sitting on it.
-
+  
      Two rules do the work. Nothing reaches white — the ceiling is 98.4%, and the
      old pure-white surface-raised was the single thing making this theme glare.
      And surfaces carry real chroma (0.011-0.024) at LOWER lightness than before:
@@ -41,7 +36,9 @@
   --semantic-text: oklch(31% 0.024 62);
   --semantic-text-muted: oklch(50% 0.026 64);
   --semantic-text-subtle: oklch(62% 0.026 70);
-  --semantic-on-primary: oklch(98% 0.012 88);
+  /* Label on the dark burnt-rust primary button: crisp neutral white for the
+     clearest possible contrast (the warm near-white read as muddy on the amber). */
+  --semantic-on-primary: #ffffff;
 
   /* ── Borders ──────────────────────────────────────────────────────────── */
   /* Strong is sepia ink, not black: the heavy rules stay structural without
@@ -60,21 +57,11 @@
   --semantic-primary-active: oklch(36% 0.105 46);
   --semantic-primary-muted: oklch(70% 0.170 58 / 0.16);
 
-  /* ── Status ───────────────────────────────────────────────────────────── */
-  /* In the contract because the agent injection hardcodes text-red-400 /
-     bg-green-400 / text-white, none of which can respond to a theme.
+  --semantic-success: var(--semantic-success);
+  --semantic-warning: var(--semantic-warning);
+  --semantic-danger: var(--semantic-danger);
+  --semantic-info: var(--semantic-info);
 
-     Light-specific literals rather than the *-500 primitives, the way .dark
-     carries its own: the -500 steps are tuned to sit on a dark ground and land
-     at 3.3-4.2:1 on paper. This UI reads money in red and green, so they are
-     deepened to clear AA as text. */
-  --semantic-success: oklch(52% 0.135 150);
-  --semantic-warning: oklch(54% 0.130 78);
-  --semantic-danger: oklch(51% 0.195 28);
-  --semantic-info: oklch(54% 0.115 64);
-
-  /* ── Scrims ───────────────────────────────────────────────────────────── */
-  /* Sepia, not cold black: a black scrim over warm paper reads as grey haze. */
   --semantic-overlay: oklch(24% 0.030 58 / 0.48);
 
   /* ── Radius — SHARP CORNERS ───────────────────────────────────────────── */
@@ -95,7 +82,7 @@
   --semantic-transition-slow: var(--primitive-duration-slow) var(--primitive-ease-smooth);
 
   /* ── Elevation ────────────────────────────────────────────────────────── */
-  /* The offset "hard" shadows this UI is built on were hardcoded to solid
+  /* The offset \"hard\" shadows this UI is built on were hardcoded to solid
      black, which disappears against a near-black dark background. Tying them
      to border-strong makes them the same rule as the border that casts them,
      in either theme. */
@@ -108,39 +95,40 @@
   --semantic-shadow-lg: 0 10px 15px oklch(30% 0.030 58 / 0.11), 0 4px 6px oklch(30% 0.030 58 / 0.07);
 }
 
-/* ── Dark — Dracula, the default, server-rendered on <html class="dark") ──
-   Palette values are Dracula's own hex, not approximations: background #282a36,
-   current-line #44475a, comment #6272a4, foreground #f8f8f2, and the six
-   accents. Purple is the brand accent here; the warm amber ramp stays the
-   light theme's. */
+/* ── Dark theme ─────────────────────────────── */
 .dark {
-  --semantic-bg: #1e1f29;
-  --semantic-bg-alt: #21222c;
-  --semantic-surface: #282a36;
-  --semantic-surface-alt: #343746;
-  --semantic-surface-raised: #44475a;
+  /* GitHub dark mode palette */
+  --semantic-bg: #0d1117;
+  --semantic-bg-alt: #161b22;
+  --semantic-surface: #1e2127;
+  --semantic-surface-alt: #2d333b;
+  /* The ceiling. Never 100%. */
+  --semantic-surface-raised: #21262d;
 
-  --semantic-text: #f8f8f2;
-  --semantic-text-muted: #b5b8d1;
-  /* Dracula's comment color — the palette's own "quiet" value. */
-  --semantic-text-subtle: #6272a4;
-  /* Purple is a light color: anything on it takes the background, not white. */
-  --semantic-on-primary: #282a36;
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --semantic-text: #c9d1d9;
+  --semantic-text-muted: #8b949e;
+  --semantic-text-subtle: #586069;
+  /* Text on the light-blue primary button: a calm near-black for strong contrast
+     and a quiet, non-glaring look (the old burnt-orange read as a glaring red). */
+  --semantic-on-primary: #0d1117;
 
-  /* Current-line for rules, comment for the emphatic ones: panels separate
-     without a bright wireframe around every box. */
-  --semantic-border: #44475a;
-  --semantic-border-strong: #6272a4;
-  --semantic-border-subtle: #343746;
+  /* ── Borders ──────────────────────────────────────────────────────────── */
+  /* Strong is sepia ink, not black: the heavy rules stay structural without
+     punching a hole in a warm page. It also casts --semantic-shadow-hard. */
+  --semantic-border: #30363d;
+  --semantic-border-strong: #484f5a;
+  --semantic-border-subtle: #30363d;
 
-  --semantic-primary: #bd93f9;
-  --semantic-primary-hover: #d7b8ff;
-  --semantic-primary-active: #a679ec;
-  --semantic-primary-muted: rgb(189 147 249 / 0.16);
+  /* ── Brand ────────────────────────────────────────────────────────────── */
+  --semantic-primary: #58a6ff;
+  --semantic-primary-hover: #66b2ff;
+  --semantic-primary-active: #44aaff;
+  --semantic-primary-muted: #58a6ff / 0.16;
 
-  --semantic-success: #50fa7b;
-  --semantic-warning: #f1fa8c;
-  --semantic-danger: #ff5555;
+  --semantic-success: #3fb950;
+  --semantic-warning: #ffa657;
+  --semantic-danger: #f85149;
   --semantic-info: #8be9fd;
 
   --semantic-overlay: oklch(0% 0 0 / 0.72);

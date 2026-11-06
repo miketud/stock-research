@@ -30,6 +30,8 @@ backend/var/
 
 # Testing
 coverage/
+e2e/test-results/
+e2e/playwright-report/
 
 # Env — .env.example is committed on purpose; it documents the contract.
 # Hence the narrow patterns rather than CNA's `.env*`, which would swallow it.
@@ -37,9 +39,6 @@ coverage/
 .env.local
 .env.*.local
 !.env.example
-
-# Bootstrap scratch — the manifest itself IS committed; it is the ledger.
-.bootstrap/tmp/
 
 # Deploy
 .vercel

@@ -1,0 +1,13 @@
+{
+  "name": "stock-research",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.30.3",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "test:e2e": "pnpm --filter e2e test"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.65.0"
+  }
+}

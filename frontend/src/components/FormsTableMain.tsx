@@ -90,7 +90,7 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
   const hasScrollableFilings = visibleFilings.length > 10;
 
   return (
-    <section className="overflow-x-auto border border-border bg-surface font-mono">
+    <section className="overflow-x-auto font-mono">
       {/* The whole bar toggles the panel; the filter cell stops its own clicks
           and keys so typing there never collapses the table. */}
       <div
@@ -105,10 +105,10 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
         aria-expanded={panelOpen}
         aria-controls="forms-table-body"
         title={panelOpen ? 'Collapse forms table' : 'Expand forms table'}
-        className="flex cursor-pointer flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-1.5 transition-colors hover:bg-surface-alt"
+        className="flex flex-wrap items-center justify-between gap-3 px-3 py-1.5 transition-colors hover:bg-surface-alt"
       >
         <div className="flex items-center gap-3">
-          <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">
+          <h2 className="text-xs font-medium uppercase tracking-[0.1em] text-text">
             Forms table
           </h2>
           <span className="text-sm leading-none text-text-subtle" aria-hidden="true">
@@ -134,7 +134,7 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
               if (event.target.value.trim()) setPanelOpen(true);
             }}
             placeholder="Filter Forms"
-            className="min-w-44 border border-border bg-bg px-2 py-0.5 font-mono text-[11px] text-text placeholder:text-text-subtle focus:border-primary focus:outline-none"
+            className="min-w-44 border border-border px-2 py-0.5 font-mono text-text placeholder:text-text-subtle focus:border-primary focus:outline-none"
           />
           <span className="text-[10px] tabular-nums text-text-subtle" aria-live="polite">
             {visibleFilings.length} / {filings.length}
@@ -145,10 +145,10 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
         id="forms-table-body"
         // The table is display:block for the scrollable tbody, so the hidden
         // attribute alone would lose to that class — toggle the class itself.
-        className={`w-full min-w-[640px] border-collapse text-left ${panelOpen ? 'block' : 'hidden'}`}
+        className={`w-full min-w-[640px] border-collapse border border-border text-left ${panelOpen ? 'block' : 'hidden'}`}
       >
         <thead className="block">
-          <tr className="table w-full table-fixed border-b border-border bg-bg-alt text-[10px] font-black uppercase tracking-[0.15em] text-text-subtle">
+          <tr className="table w-full table-fixed border-b px-3 py-1 bg-bg-alt text-xs font-medium uppercase tracking-[0.1em] text-text-subtle">
             {(
               [
                 ['type', 'FORM', 'text-left'],
@@ -162,7 +162,7 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                 aria-sort={
                   sortKey === key ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'
                 }
-                className={`h-7 px-3 py-1 ${alignment} ${key === 'type' ? 'w-[40%]' : 'w-[30%]'}`}
+                className={`h-7 px-3 py-1 border-b ${alignment} ${key === 'type' ? 'w-[40%]' : 'w-[30%]'}`}
               >
                 <button
                   type="button"
@@ -184,13 +184,13 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
         <tbody
           className={`block max-h-[35rem] ${
             hasScrollableFilings
-              ? 'overflow-y-scroll [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2'
+              ? 'overflow-y-scroll'
               : ''
           }`}
         >
           {visibleFilings.length === 0 ? (
             <tr className="table w-full table-fixed">
-              <td colSpan={3} className="px-4 py-8 text-center font-bold text-text-muted">
+              <td colSpan={3} className="px-4 py-8 text-center text-text-muted">
                 {filings.length === 0
                   ? 'No filings found for this ticker.'
                   : 'No loaded filings match this filter.'}
@@ -226,9 +226,9 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                       event.preventDefault();
                       toggleFiling(filing.accessionNumber);
                     }}
-                    className="group table h-8 w-full cursor-pointer table-fixed border-b border-border text-xs transition-colors hover:bg-surface-alt focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
+                    className="flex h-8 w-full cursor-pointer border-b text-xs transition-colors hover:bg-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
                   >
-                    <td className="w-[40%] px-3 py-1 font-black text-primary">
+                    <td className="w-[40%] px-3 py-1 font-medium text-primary">
                       <span className="mr-2 inline-block w-3 text-text-muted" aria-hidden="true">
                         {expanded ? '−' : '+'}
                       </span>
@@ -265,19 +265,19 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(event) => event.stopPropagation()}
-                        className="inline-block border border-border px-2 py-0.5 text-[10px] font-black uppercase text-text-subtle transition-colors hover:border-primary hover:text-primary"
+                        className="inline-block border border-border px-2 py-0.5 text-[10px] font-medium uppercase text-text-subtle transition-colors hover:border-primary hover:text-primary"
                       >
                         VIEW
                       </a>
                     </td>
                   </tr>
                   {expanded && (
-                    <tr className="table w-full table-fixed border-b-2 border-border bg-surface-alt">
+                    <tr className="flex w-full table-fixed border-b-2 bg-bg-alt">
                       <td colSpan={3} className="px-5 py-4">
                         <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
                           {metadata.map(([label, value]) => (
                             <div key={label}>
-                              <dt className="mb-1 font-mono text-[10px] font-black uppercase tracking-wide text-text-muted">
+                              <dt className="mb-1 font-mono text-[10px] font-medium uppercase tracking-wide text-text-muted">
                                 {label}
                               </dt>
                               <dd className="break-words font-mono text-xs font-bold text-text">
