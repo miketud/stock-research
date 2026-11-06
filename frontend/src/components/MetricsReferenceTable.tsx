@@ -57,128 +57,132 @@ const DERIVED_RATIOS: MetricDefinition[] = [
   { key: 'pegRatio', label: 'PEG Ratio', category: 'Valuation', definition: 'P/E ratio divided by the expected earnings growth rate.', formula: '(Price per Share / EPS) / Growth Rate' },
 ];
 
-const COLUMNS = [
-  { key: 'key', label: 'Key' },
+const COLUMN_DEFS = [
   { key: 'label', label: 'Label' },
   { key: 'category', label: 'Category' },
   { key: 'definition', label: 'Definition' },
   { key: 'formula', label: 'Formula' },
 ] as const;
 
-type SortKey = (typeof COLUMNS)[number]['key'];
+type SortKey = (typeof COLUMN_DEFS)[number]['key'];
 type SortDirection = 'asc' | 'desc';
 
-function SortableMetricTable({ data }: { data: MetricDefinition[] }) {
+function SortableMetricTable({
+  title,
+  data,
+  search,
+}: {
+  title?: string;
+  data: MetricDefinition[];
+  search: string;
+}) {
   const [sortKey, setSortKey] = useState<SortKey>('label');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
-  const sortedData = useMemo(() => {
-    return [...data].sort((a, b) => {
+  const rows = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase();
+    const filtered = query
+      ? data.filter((m) =>
+          [m.label, m.category, m.definition, m.formula]
+            .join(' ')
+            .toLocaleLowerCase()
+            .includes(query)
+        )
+      : data;
+
+    return [...filtered].sort((a, b) => {
       const comparison = (a[sortKey] ?? '').localeCompare(b[sortKey] ?? '', undefined, {
         numeric: true,
         sensitivity: 'base',
       });
       return sortDirection === 'asc' ? comparison : -comparison;
     });
-  }, [data, sortKey, sortDirection]);
+  }, [data, search, sortKey, sortDirection]);
 
-  const handleSort = (key: SortKey) => {
-    if (sortKey === key) {
+  const changeSort = (nextKey: SortKey) => {
+    if (sortKey === nextKey) {
       setSortDirection((current) => (current === 'asc' ? 'desc' : 'asc'));
       return;
     }
-    setSortKey(key);
+    setSortKey(nextKey);
     setSortDirection('asc');
   };
 
   const indicator = (key: SortKey) => {
-    if (key !== sortKey) return '\u2195';
-    return sortDirection === 'asc' ? '\u2191' : '\u2193';
+    if (key !== sortKey) return '↕';
+    return sortDirection === 'asc' ? '↑' : '↓';
   };
 
   return (
-    <section className="mt-12 overflow-x-auto">
-      <table className="w-full border-collapse">
-        <thead>
-          <tr>
-            {COLUMNS.map((col) => (
-              <th
-                key={col.key}
-                className="cursor-pointer px-3 py-2 text-left font-bold uppercase tracking-wider text-text-muted transition-colors hover:text-text"
-                onClick={() => handleSort(col.key)}
-              >
-                {col.label} {indicator(col.key)}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {sortedData.map((metric) => (
-            <tr
-              key={metric.key}
-              className="border-b border-border transition-colors hover:bg-bg-alt/50"
-            >
-              <td className="px-3 py-2 font-bold text-primary">{metric.key}</td>
-              <td className="px-3 py-2 text-text">{metric.label}</td>
-              <td className="px-3 py-2 text-text-muted">{metric.category}</td>
-              <td className="px-3 py-2 leading-relaxed text-text">{metric.definition}</td>
-              <td className="px-3 py-2 italic text-text-muted">{metric.formula}</td>
+    <section className="mt-10 overflow-hidden border border-border bg-surface">
+      {title ? (
+        <div className="border-b border-border bg-surface-alt px-4 py-3">
+          <h2 className="font-mono text-sm font-black uppercase tracking-widest text-text-muted">
+            {title}
+          </h2>
+        </div>
+      ) : null}
+      <div className="max-h-[65vh] overflow-auto">
+        <table className="w-full min-w-[880px] table-fixed border-collapse text-left">
+          <colgroup>
+            <col className="w-[20%]" />
+            <col className="w-[10%]" />
+            <col className="w-[40%]" />
+            <col className="w-[30%]" />
+          </colgroup>
+          <thead className="sticky top-0 z-10 bg-surface-alt">
+            <tr>
+              {COLUMN_DEFS.map(({ key, label }) => (
+                <th key={key} className="px-4 py-3 text-text-muted">
+                  <button
+                    type="button"
+                    onClick={() => changeSort(key)}
+                    aria-label={`Sort by ${label}`}
+                    className="inline-flex items-center gap-2 font-black uppercase"
+                  >
+                    {label}
+                    <span aria-hidden="true">{indicator(key)}</span>
+                  </button>
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((metric) => (
+              <tr
+                key={metric.key}
+                className="border-b-2 border-border transition-colors hover:bg-surface-alt focus-visible:bg-surface-alt/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
+              >
+                <td className="px-4 py-3 text-sm font-bold text-text">{metric.label}</td>
+                <td className="px-4 py-3 font-mono text-xs text-text-muted">{metric.category}</td>
+                <td className="px-4 py-3 leading-relaxed text-text">{metric.definition}</td>
+                <td className="px-4 py-3 italic text-text-muted">{metric.formula}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }
 
-function AppendixGrid({ data }: { data: MetricDefinition[] }) {
-  return (
-    <div className="mt-16 border-t border-border pt-12">
-      <h3 className="mb-8 font-mono text-sm font-black uppercase tracking-widest text-text-muted">
-        Definitions Quick-Reference
-      </h3>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {data.map((metric) => (
-          <div
-            key={metric.key}
-            className="border border-border bg-bg-alt p-4 hover:border-primary transition-colors"
-          >
-            <div className="mb-2 flex items-center justify-between">
-              <span className="font-mono text-[10px] font-black uppercase text-primary">
-                {metric.key}
-              </span>
-              <span className="font-mono text-[10px] uppercase text-text-muted">
-                {metric.category}
-              </span>
-            </div>
-            <h4 className="mb-2 font-mono text-xs font-bold text-text">{metric.label}</h4>
-            <p className="mb-3 text-[11px] leading-relaxed text-text-muted">{metric.definition}</p>
-            <div className="border-t border-border pt-2 text-[10px] font-mono italic text-text-muted/70">
-              Formula: {metric.formula}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export function MetricsReferenceTable() {
+  const [search, setSearch] = useState('');
+
   return (
-    <div className="p-6 font-mono">
-      <header className="mb-12">
-        <h1 className="text-2xl font-black uppercase tracking-tighter text-text">
-          Metrics Reference
-        </h1>
-        <p className="text-xs text-text-muted">
-          Comprehensive directory of tracked financial facts and derived analytical ratios.
-        </p>
-      </header>
+    <div className="font-mono">
+      <div className="border-b border-border bg-surface-alt p-4">
+        <input
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Search labels, categories, definitions, or formulas…"
+          className="h-11 w-full border border-border bg-surface px-3 font-mono text-sm text-text placeholder:text-text-muted focus:outline-none"
+        />
+      </div>
 
-      <SortableMetricTable data={TRACKED_FACTS} />
-      <SortableMetricTable data={DERIVED_RATIOS} />
-
-      <AppendixGrid data={[...TRACKED_FACTS, ...DERIVED_RATIOS]} />
+      <SortableMetricTable title="Financial Facts" search={search} data={TRACKED_FACTS} />
+      <SortableMetricTable title="Derived Ratios" search={search} data={DERIVED_RATIOS} />
     </div>
   );
 }
