@@ -90,7 +90,7 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
   const hasScrollableFilings = visibleFilings.length > 10;
 
   return (
-    <section className="overflow-x-auto font-mono">
+    <section className="overflow-x-auto border border-border bg-surface font-mono">
       {/* The whole bar toggles the panel; the filter cell stops its own clicks
           and keys so typing there never collapses the table. */}
       <div
@@ -105,12 +105,12 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
         aria-expanded={panelOpen}
         aria-controls="forms-table-body"
         title={panelOpen ? 'Collapse forms table' : 'Expand forms table'}
-        className="flex flex-wrap items-center justify-between gap-3 px-3 py-1.5 transition-colors hover:bg-surface-alt"
+        className="flex min-h-[42px] cursor-pointer flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-1.5 transition-colors hover:bg-surface-alt"
       >
         <div className="flex items-center gap-3">
-          <h2 className="text-xs font-medium uppercase tracking-[0.1em] text-text">
+          <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">
             Forms table
-          </h2>
+          </h3>
           <span className="text-sm leading-none text-text-subtle" aria-hidden="true">
             {panelOpen ? '−' : '+'}
           </span>
@@ -145,7 +145,9 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
         id="forms-table-body"
         // The table is display:block for the scrollable tbody, so the hidden
         // attribute alone would lose to that class — toggle the class itself.
-        className={`w-full min-w-[640px] border-collapse border border-border text-left ${panelOpen ? 'block' : 'hidden'}`}
+        // The outer border lives on the panel <section>, matching
+        // InsiderFormsTable, so this one is borderless.
+        className={`w-full min-w-[640px] border-collapse text-left ${panelOpen ? 'block' : 'hidden'}`}
       >
         <thead className="block">
           <tr className="table w-full table-fixed border-b px-3 py-1 bg-bg-alt text-xs font-medium uppercase tracking-[0.1em] text-text-subtle">
@@ -226,12 +228,15 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                       event.preventDefault();
                       toggleFiling(filing.accessionNumber);
                     }}
-                    className="flex h-8 w-full cursor-pointer border-b text-xs transition-colors hover:bg-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
+                    className="group/row flex h-8 w-full cursor-pointer border-b text-xs transition-colors hover:bg-bg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]"
                   >
                     <td className="w-[40%] px-3 py-1 font-medium text-primary">
                       <span className="mr-2 inline-block w-3 text-text-muted" aria-hidden="true">
                         {expanded ? '−' : '+'}
                       </span>
+                      {/* This component's internal popover is the tooltip of record
+                          for the form description — deliberately no native `title`
+                          here, which would raise a second browser tooltip on top. */}
                       <span
                         className="group/form relative inline-flex focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                         tabIndex={filing.formDescription ? 0 : -1}
@@ -240,7 +245,6 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                             ? `form-description-${filing.accessionNumber}`
                             : undefined
                         }
-                        title={filing.formDescription}
                         onClick={(event) => event.stopPropagation()}
                         onKeyDown={(event) => event.stopPropagation()}
                       >
@@ -249,7 +253,15 @@ export function FormsTableMain({ filings }: { filings: Filing[] }) {
                           <span
                             id={`form-description-${filing.accessionNumber}`}
                             role="tooltip"
-                            className="pointer-events-none absolute left-0 top-full z-30 mt-1 w-64 border border-border bg-bg-alt px-2 py-1 font-mono text-[10px] text-text opacity-0 transition-opacity group-hover/form:opacity-100 group-focus-within/form:opacity-100"
+                            /* Overflow-safe placement:
+                               - above by default; rows 1–2 flip below, because the
+                                 scrolling tbody clips at its top edge and those rows
+                                 have no room above (64px+ is always free below them
+                                 when the scroller is active);
+                               - text wraps and the box caps at 64px (two rows) with
+                                 internal scrolling, enabled while visible, so no
+                                 popover can outgrow the space it flips into. */
+                            className="pointer-events-none absolute bottom-full left-0 z-30 mb-1 max-h-16 w-64 overflow-y-auto break-words border border-border bg-bg-alt px-2 py-1 font-mono text-[10px] text-text opacity-0 transition-opacity group-hover/form:pointer-events-auto group-hover/form:opacity-100 group-focus-within/form:pointer-events-auto group-focus-within/form:opacity-100 group-first/row:top-full group-first/row:bottom-auto group-first/row:mt-1 group-first/row:mb-0 group-[:nth-child(2)]/row:top-full group-[:nth-child(2)]/row:bottom-auto group-[:nth-child(2)]/row:mt-1 group-[:nth-child(2)]/row:mb-0"
                           >
                             {filing.formDescription}
                           </span>

@@ -156,7 +156,7 @@ export function InsiderFormsTable({
         aria-expanded={panelOpen}
         aria-controls="insider-panel-body"
         title={panelOpen ? 'Collapse insider ownership' : 'Expand insider ownership'}
-        className="flex cursor-pointer flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-1.5 transition-colors hover:bg-surface-alt"
+        className="flex min-h-[42px] cursor-pointer flex-wrap items-center justify-between gap-3 border-b border-border px-3 py-1.5 transition-colors hover:bg-surface-alt"
       >
         <div className="flex items-center gap-3">
           <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">
